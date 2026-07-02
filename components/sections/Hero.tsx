@@ -95,7 +95,7 @@ export function Hero() {
 
             <a
               href="#planes"
-              className="hero-fade hero-cta mt-8 inline-block rounded-full border-4 border-azul bg-amarillo px-8 py-3 font-blur text-sm uppercase tracking-wide text-azul shadow-md md:text-base"
+              className="hero-fade hero-cta mt-8 inline-block rounded-full border-2 border-azul bg-amarillo px-8 py-3 font-blur text-2xl uppercase tracking-wide text-azul shadow-md md:text-3xl"
             >
               Reservar
             </a>
