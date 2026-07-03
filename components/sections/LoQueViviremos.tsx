@@ -1,0 +1,91 @@
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
+import { vivencias, type Vivencia } from "@/lib/data/lo-que-viviremos";
+
+function VivenciaCard({ vivencia }: { vivencia: Vivencia }) {
+  return (
+    <article className="vivencia-card group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-xl md:aspect-[5/6]">
+      <Image
+        src={vivencia.imagen}
+        alt={vivencia.titulo}
+        fill
+        sizes="(max-width: 768px) 92vw, (max-width: 1200px) 30vw, 360px"
+        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-linear-to-b from-black/0 via-black/5 to-black/70" />
+      <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-5">
+        <h3 className="font-helvetica-now text-xl leading-none md:text-2xl">
+          {vivencia.titulo}
+        </h3>
+        <p className="mt-1 font-myriad text-sm leading-tight text-white/85 md:text-base">
+          {vivencia.subtitulo}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+export function LoQueViviremos() {
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from(".vivencias-eyebrow, .vivencias-title", {
+          opacity: 0,
+          y: 28,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 78%",
+            once: true,
+          },
+        });
+
+        gsap.from(".vivencia-card", {
+          opacity: 0,
+          y: 60,
+          scale: 0.96,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".vivencias-grid",
+            start: "top 82%",
+            once: true,
+          },
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: container }
+  );
+
+  return (
+    <section ref={container} className="bg-white py-16 md:py-20 lg:py-24">
+      <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+        <p className="vivencias-eyebrow inline-flex rounded-full bg-black/8 px-3 py-1 font-montserrat text-sm font-bold text-black/25 md:text-base">
+          Nuestros destinos
+        </p>
+        <h2 className="vivencias-title mt-5 font-blur text-5xl leading-none text-azul md:text-6xl lg:text-7xl">
+          LO QUE VIVIREMOS
+        </h2>
+
+        <div className="vivencias-grid mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+          {vivencias.map((vivencia) => (
+            <VivenciaCard key={vivencia.id} vivencia={vivencia} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

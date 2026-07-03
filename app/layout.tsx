@@ -49,7 +49,9 @@ export default function RootLayout({
       lang="es"
       className={`${raices.variable} ${blur.variable} ${helveticaNow.variable} ${montserrat.variable} ${myriad.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
