@@ -33,27 +33,22 @@ export function Sponsors() {
 
   return (
     <section ref={container} className="relative bg-amarillo py-10 md:py-12">
-      <div className="sponsors-inner mx-auto grid w-full max-w-6xl items-center gap-8 px-4 md:grid-cols-[1fr_auto_1fr] md:gap-6 md:px-6">
-        <div className="flex items-center justify-center gap-3 md:justify-start">
-          <p className="font-montserrat text-sm font-semibold text-ink md:text-base">
-            Experiencia por
-          </p>
-          <Image
-            src="/logos/random-trips-logo-azul.svg"
-            alt="Random Trips"
-            width={999}
-            height={298}
-            className="h-8 w-auto md:h-9"
-          />
-        </div>
-
-        <p className="text-center font-montserrat text-3xl font-extrabold uppercase leading-[0.95] tracking-tight text-azul md:text-4xl lg:text-5xl">
-          <span className="block">República</span>
-          <span className="block">Dominicana</span>
+      <div className="sponsors-inner mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-6 px-4 md:gap-x-14 md:px-6">
+        <p className="font-montserrat text-sm font-semibold text-azul md:text-base">
+          Experiencia por:
         </p>
 
-        <p className="text-center font-myriad text-lg italic text-azul md:justify-self-end md:text-xl md:[writing-mode:vertical-rl] md:rotate-180">
-          Creative Experience
+        <Image
+          src="/logos/random-trips-logo-azul.svg"
+          alt="Random Trips"
+          width={999}
+          height={298}
+          className="h-10 w-auto md:h-12"
+        />
+
+        <p className="font-blur text-3xl uppercase leading-[0.95] text-azul md:text-4xl lg:text-5xl">
+          <span className="block">República</span>
+          <span className="block">Dominicana</span>
         </p>
       </div>
     </section>
