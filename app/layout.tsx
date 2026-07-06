@@ -14,22 +14,10 @@ const blur = localFont({
   display: "swap",
 });
 
-const helveticaNow = localFont({
-  src: "../public/font/helveticanowtext-bold-demo.ttf",
-  variable: "--font-helvetica-now",
-  display: "swap",
-});
-
 const montserrat = localFont({
   src: "../public/font/Montserrat-VariableFont_wght.ttf",
   variable: "--font-montserrat",
   weight: "100 900",
-  display: "swap",
-});
-
-const myriad = localFont({
-  src: "../public/font/MyriadPro-Regular.otf",
-  variable: "--font-myriad",
   display: "swap",
 });
 
@@ -47,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${raices.variable} ${blur.variable} ${helveticaNow.variable} ${montserrat.variable} ${myriad.variable} h-full antialiased`}
+      className={`${raices.variable} ${blur.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}

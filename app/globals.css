@@ -13,9 +13,7 @@
 @theme inline {
   --font-raices: var(--font-raices);
   --font-blur: var(--font-blur);
-  --font-helvetica-now: var(--font-helvetica-now);
   --font-montserrat: var(--font-montserrat);
-  --font-myriad: var(--font-myriad);
 }
 
 body {
