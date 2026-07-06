@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { esParaTiSi, noEsParaTiSi } from "@/lib/data/para-ti";
@@ -21,7 +22,7 @@ function BloqueParaTi({
     <div
       className={`parati-block max-w-3xl ${esPositivo ? "" : "md:ml-auto"}`}
     >
-      <h2 className="parati-title font-blur text-4xl leading-none text-white md:text-5xl lg:text-6xl">
+      <h2 className="parati-title font-blur text-4xl leading-none text-azul md:text-5xl lg:text-6xl">
         {titulo}
       </h2>
 
@@ -38,7 +39,7 @@ function BloqueParaTi({
             >
               {esPositivo ? <CheckIcon /> : <XIcon />}
             </span>
-            <span className="font-montserrat text-base font-medium leading-snug text-white md:text-lg">
+            <span className="font-montserrat text-base font-medium leading-snug text-azul md:text-lg">
               {item}
             </span>
           </li>
@@ -98,7 +99,7 @@ export function ParaTi() {
   return (
     <section
       ref={container}
-      className="overflow-hidden bg-azul py-16 md:py-20 lg:py-24"
+      className="overflow-hidden bg-white py-16 md:py-20 lg:py-24"
     >
       <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
         <BloqueParaTi
@@ -107,7 +108,18 @@ export function ParaTi() {
           variant="si"
         />
 
-        <div className="mt-16 md:mt-24">
+        <div className="mt-16 flex flex-col items-center gap-12 md:mt-24 md:flex-row md:justify-between md:gap-16">
+          <div className="w-44 shrink-0 md:w-56 lg:w-64">
+            <Image
+              src="/images/vive.png"
+              alt="Vive lo inesperado — Alo Random"
+              width={811}
+              height={812}
+              sizes="256px"
+              className="h-auto w-full"
+            />
+          </div>
+
           <BloqueParaTi
             titulo="NO ES PARA TI SI:"
             items={noEsParaTiSi}
