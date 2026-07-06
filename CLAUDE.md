@@ -46,31 +46,30 @@ colors: {
 
 ### Tipografía
 
-Archivos en `/public/fonts/`, cargados con `next/font/local` en `app/layout.tsx`. Mapeo de uso confirmado por referencia visual:
+Archivos en `/public/font/`, cargados con `next/font/local` en `app/layout.tsx`. **Mapeo verificado nodo por nodo contra el Figma** (`Landing Page Random Trips`, file key `bsLqRlBDgAlr22p04Gbhwm`) — el diseño usa SOLO 3 familias:
 
-- **`Blur Bold.ttf`** → `font-blur` — títulos redondeados gruesos tipo bubble/rounded (ej. "Explora", "LO QUE VIVIREMOS", headers de sección, nombres de días DIA 1-9). Es la fuente bold redondeada que se ve en "Republica Domincana" con letras infladas/rounded.
-- **`DonJose_Raices.otf`** → `font-raices` → **SOLO** para el título hero gigante con textura de rayas/tribal: "REPUBLICA DOMINICANA" en el hero atardecer y "CARIBE" en el hero superior. Es una fuente display muy decorativa (efecto rayado/grabado) — usar exclusivamente en esos 2 lugares, nunca en texto de lectura.
-- **`helveticanowtext-bold-demo.ttf`** → `font-helvetica-now` — subtítulos bold, labels de sección, texto de énfasis (ej. "El corazón del", nombres de planes PLAN 1/2/3, títulos de cards de destinos)
-- **`Montserrat-VariableFont_wght.ttf`** → `font-montserrat` — texto de UI, botones, navegación, listas (Incluye/No incluye), FAQ. Es variable font, usar distintos `font-weight` (400 regular, 600 semibold, 700 bold) en vez de archivos separados.
-- **`MyriadPro-Regular.otf`** → `font-myriad` — párrafos largos de lectura (descripciones del itinerario, bio de hosts, "Lo que viviremos"). Es la fuente más neutra, para bloques de texto corrido donde la legibilidad importa más que el estilo.
+- **`DonJose_Raices.otf`** → `font-raices` — **SOLO** los 2 títulos display "REPUBLICA DOMINICANA" (hero superior, ~134px en Figma, y hero atardecer). Nota: en Figma "CARIBE" usa el estilo *Don José Trayecto*, del cual no tenemos archivo — se renderiza con Raíces hasta conseguirlo.
+- **`Blur Bold.ttf`** → `font-blur` — headers de sección ("LO QUE VIVIREMOS", "ITINERARIO DEL VIAJE", "CONOCE LOS HOSTS"…, 64px en Figma), "8 DÍAS Y 7 NOCHES", pills "DÍA X:" (40px azul), **todos los botones** (RESERVAR, DESCARGAR, WHATSAPP), labels de los pins del mapa (blanco sobre pill roja con borde blanco) y nombres de hosts.
+- **`Montserrat-VariableFont_wght.ttf`** → `font-montserrat` — **todo lo demás**. Variable font; los pesos marcan la jerarquía:
+  - **Bold (700)**: "Explora" / "Descubre la", "El corazón del" / "como pocos la conocen.", "Ruta:", títulos de cards de destinos (24px), títulos de días en el acordeón (36px azul), preguntas del FAQ, énfasis inline (`<strong>`), badges del hero
+  - **Medium (500)**: descripción del hero (20px), "Contáctanos", roles de hosts
+  - **Regular (400)**: párrafos de lectura (intro del mapa 20px, bio de hosts 16px, respuestas FAQ, subtítulos de cards 16px) — con spans **Bold** para énfasis inline
+
+**NO usadas en el diseño de Figma**: `helveticanowtext-bold-demo.ttf` y `MyriadPro-Regular.otf` (los archivos permanecen en `/public/font/` pero ya no se cargan en `layout.tsx` ni se exponen en `globals.css`). No reintroducirlas sin verificar contra el diseño.
 
 **Regla de aplicación:**
 ```
-Display decorativo (2 usos únicos) → DonJose_Raices
-Headers redondeados de sección     → Blur Bold
-Subtítulos / labels / énfasis      → Helvetica Now Text Bold
-Botones / nav / listas / FAQ       → Montserrat (variable)
-Párrafos largos de lectura         → Myriad Pro Regular
+Display decorativo (2 usos únicos)         → DonJose_Raices (font-raices)
+Headers de sección / botones / pills DÍA X → Blur Bold (font-blur)
+Todo lo demás (subtítulos, labels, texto)  → Montserrat (font-montserrat + font-bold/font-medium)
 ```
 
-En `tailwind.config.ts`:
-```ts
-fontFamily: {
-  raices: ['var(--font-raices)'],
-  blur: ['var(--font-blur)'],
-  'helvetica-now': ['var(--font-helvetica-now)'],
-  montserrat: ['var(--font-montserrat)'],
-  myriad: ['var(--font-myriad)'],
+Las fuentes se registran como CSS variables en `app/globals.css` bajo `@theme inline` (Tailwind v4, sin `tailwind.config.ts`):
+```css
+@theme inline {
+  --font-raices: var(--font-raices);
+  --font-blur: var(--font-blur);
+  --font-montserrat: var(--font-montserrat);
 }
 ```
 
@@ -183,6 +182,8 @@ export { gsap, ScrollTrigger, SplitText };
 4. **`will-change` moderado**: solo en elementos que se animan constantemente (hero), no en scroll reveals puntuales
 
 5. **Timeline sobre tweens sueltos** cuando hay 2+ animaciones coordinadas en el mismo elemento
+
+5b. **Preferir `fromTo` sobre `from`** en reveals con ScrollTrigger: con React Strict Mode (doble montaje en dev), `gsap.from()` puede capturar como valor final el estado ya contaminado del primer montaje y dejar elementos atascados (ej. botones congelados en `scale: 0.6`). `fromTo` con valores explícitos es inmune. Bug real encontrado en CTAFinal.
 
 6. **Duración por defecto**: `0.8-1.2s` para reveals, `0.3-0.5s` para hovers/microinteracciones
 
@@ -314,6 +315,8 @@ Estos wrappers evitan que Claude Code reescriba lógica de GSAP en cada sección
 - Subtítulo: **"Del Miércoles 2 al Viernes 11 de Septiembre"**
 - Título: **"ITINERARIO DEL VIAJE"** *(el PDF dice "ITINERARARIO" — corregir typo)*
 
+Cada día abierto muestra un botón **"Ver Galería de fotos"** (pill amarilla) que abre un lightbox/carrusel (`GaleriaLightbox.tsx`): overlay oscuro, imagen central, flechas circulares blancas, X arriba a la derecha, navegación con teclado (Esc/←/→). Las fotos se leen del filesystem en `app/page.tsx` (server) vía `lib/galeria.ts`: **basta con soltar imágenes en `/public/images/galeria/<dia-id>/`** (dia-1 … dia-9) para que aparezcan; mientras una carpeta esté vacía se usa la imagen principal del día como única foto.
+
 Días (fuente: `/lib/data/itinerario.ts`):
 - **DIA 1** — Llegada a Santo Domingo · Libre
 - **DIA 2** — Puerto Plata
@@ -364,13 +367,15 @@ Título: **"CONOCE EL HOST"** (fondo coral/rojo, dos cards laterales con foto)
 
 **Animaciones**: cards entran desde los lados (Bernat desde izquierda, Randy desde derecha), texto central con fade.
 
-### 9. Asegura tu cupo (3 planes)
-Título: **"ASEGURA TU CUPO"**
-- **PLAN 1** — <!-- TODO -->
-- **PLAN 2** — <!-- TODO --> (destacado)
-- **PLAN 3** — <!-- TODO -->
+### 9. Modalidad de pago (3 planes) — `ModalidadPago.tsx`
+Va justo después de "Conoce los hosts". Fondo azul + textura `TEXTURA3x.png`; el sticker `vive.png` (girando, como en el hero) montado sobre el borde superior con la sección roja del Host.
+- Título: **"MODALIDAD DE PAGO"** + kicker **"ASEGURA TU CUPO"** debajo
+- 3 cards blancas con los planes de `lib/data/planes.ts` (**precios placeholder, TODO reales**); el plan destacado va elevado (`md:-translate-y-9`) con badge "Más elegido"
+- Cada card lleva CTA RESERVAR → `/reservar`
+- Debajo de las cards: párrafo intro (el mismo copy de la travesía, con bolds)
+- Tiene `id="planes"`
 
-**Animaciones**: ver ⭐ #5
+**Animaciones**: ver ⭐ #5 (con `fromTo`, regla 5b)
 
 ### 10. Esta experiencia es para ti si / No es para ti si
 
@@ -394,11 +399,21 @@ Título: **"ASEGURA TU CUPO"**
 - CTA: **"RESERVA TU LUGAR AHORA"**
 - **Animaciones**: ver 🔥 #2
 
-### 13. FAQ (acordeón)
-Título: **"PREGUNTAS FRECUENTES"**
-<!-- TODO: preguntas reales de Randy -->
+### 13. FAQ por categorías
+Sección standalone (ya NO va solapada sobre el hero atardecer). Fondo azul + textura `TEXTURA3x.png`.
+- Título: **"PREGUNTAS FRECUENTES"**
+- 3 cards blancas de categoría con emoji grande (💳 Reserva y Pagos / 🧳 Antes del Viaje / ⭐ Durante la Experiencia) — **excepción documentada a la regla "no emojis"**: el diseño de Figma usa artwork de emoji para estas categorías
+- La categoría activa se marca con ring amarillo + "palomita" (cola de globo blanca apuntando hacia abajo) + scale
+- Al hacer click en una categoría se muestran solo sus preguntas (acordeón); chevron amarillo cerrado / gris abierto
+- Datos en `lib/data/faq.ts`: cada pregunta tiene `categoria`, y `categoriasFaq` define las 3 categorías
 
-**Animaciones**: fade-in del título, sin animar los items individuales (utilidad).
+**Animaciones**: reveal de título y cards; las preguntas entran con stagger al cambiar de categoría (`fromTo`, dependencies).
+
+### 13b. ¿Más preguntas? Contáctanos — `Contacto.tsx`
+Después del FAQ, fondo blanco, `id="contacto"` (el link "Contáctanos" del header apunta aquí).
+- Título 2 líneas: **"¿MÁS PREGUNTAS?" / "CONTACTANOS"** (font-blur azul)
+- Form: nombre + correo (2 cols), textarea mensaje, botón "Enviar mensaje" (Montserrat bold, NO blur/uppercase — así está en el diseño)
+- `POST /api/contacto` → guarda en `data/mensajes.json` vía `lib/mensajes/store.ts` (**interino igual que reservas** — misma limitación en Vercel; reemplazar por backend real después)
 
 ### 14. CTA final
 - Título: **"¿TE UNES A LA EXPERIENCIA?"**
@@ -409,9 +424,32 @@ Título: **"PREGUNTAS FRECUENTES"**
 ## Interactividad
 
 - **Acordeones**: shadcn Accordion, `type="single" collapsible`
-- **RESERVAR**: `<a href="#planes">` por ahora
+- **RESERVAR**: `<a href="/reservar">` — lleva a la página de reserva/checkout (ver sección siguiente)
 - **WHATSAPP**: `https://wa.me/1809XXXXXXX?text=Hola%2C%20quiero%20info%20del%20viaje%20a%20RD` <!-- TODO: número -->
 - **DESCARGAR PDF**: link a `/random-trips-rd.pdf`
+
+## Página de reserva (`/reservar`)
+
+Ruta nueva (`app/reservar/page.tsx`) a la que apuntan los 3 CTAs "RESERVAR" del sitio. Flujo de 3 pasos manejado en `components/reserva/ReservaFlow.tsx` (client component, estado con `useState`, sin librería de formularios):
+
+1. **Formulario**: elegir plan (`PlanSelector.tsx`, datos en `lib/data/planes.ts` — **precios placeholder, TODO reales**), cantidad de viajeros + nombre de cada uno (`ViajerosForm.tsx`), datos del titular (nombre/email/teléfono).
+2. **Confirmar y pagar**: resumen + `PagoPaypal.tsx` (`@paypal/react-paypal-js`, `PayPalScriptProvider` + `PayPalButtons`).
+3. **Éxito**: `ReservaConfirmada.tsx`.
+
+Flujo de pago (nunca confiar en el monto que mande el cliente):
+```
+PayPalButtons.createOrder → POST /api/paypal/create-order { planId, viajeros }
+  → el servidor recalcula el total desde lib/data/planes.ts (lib/paypal/client.ts)
+  → crea la orden en PayPal REST (Sandbox) y devuelve { id }
+
+PayPalButtons.onApprove → POST /api/paypal/capture-order { orderId, planId, viajeros, contacto }
+  → captura el pago en PayPal
+  → si status COMPLETED: guarda la reserva vía lib/reservas/store.ts
+```
+
+**Persistencia interina**: `lib/reservas/store.ts` escribe cada reserva pagada en `data/reservas.json` (gitignorado). Es un cajón temporal mientras no existe el backend real — **en Vercel el filesystem de producción no persiste entre invocaciones**, así que esto solo es confiable en `npm run dev` / local. Cuando exista el backend real, reemplazar únicamente `appendReserva()` por la llamada a ese backend; el resto del flujo no cambia.
+
+**Variables de entorno** (`.env.local`, ver `.env.example`): `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_API_BASE` (Sandbox por default), `NEXT_PUBLIC_PAYPAL_CLIENT_ID` (mismo valor que `PAYPAL_CLIENT_ID`, expuesto al cliente para el SDK — el Client ID no es secreto, el Secret sí). Las credenciales Sandbox reales viven en `credentials_paypal.json` en la raíz (gitignorado, nunca commitear ni leer desde código — solo para copiarlas manualmente a `.env.local`).
 
 ## Responsive
 
