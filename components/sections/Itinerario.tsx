@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { itinerario, type DiaItinerario } from "@/lib/data/itinerario";
+import { GaleriaLightbox } from "@/components/sections/GaleriaLightbox";
 
 function Chevron({ open }: { open: boolean }) {
   return (
     <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-black/5 md:size-16">
       <span
         className={`size-4 rotate-45 border-r-4 border-b-4 border-azul transition-transform duration-300 ${
-          open ? "translate-y-1 rotate-[225deg]" : "-translate-y-1"
+          open ? "translate-y-1 rotate-225" : "-translate-y-1"
         }`}
         aria-hidden
       />
@@ -19,11 +20,17 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-function ItinerarioPanel({ dia }: { dia: DiaItinerario }) {
+function ItinerarioPanel({
+  dia,
+  onVerGaleria,
+}: {
+  dia: DiaItinerario;
+  onVerGaleria: () => void;
+}) {
   return (
     <div className="itinerary-panel overflow-hidden rounded-3xl bg-white shadow-xl">
       <div className="grid gap-6 p-4 md:grid-cols-[280px_1fr] md:gap-8 md:p-0 lg:grid-cols-[320px_1fr]">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl md:aspect-auto md:min-h-[280px] md:rounded-r-none md:rounded-l-3xl">
+        <div className="relative aspect-4/3 overflow-hidden rounded-2xl md:aspect-auto md:min-h-70 md:rounded-r-none md:rounded-l-3xl">
           <Image
             src={dia.imagen}
             alt={dia.titulo}
@@ -34,22 +41,42 @@ function ItinerarioPanel({ dia }: { dia: DiaItinerario }) {
         </div>
 
         <div className="flex flex-col justify-center pb-6 md:py-8 md:pr-10 lg:pr-14">
-          <h3 className="font-helvetica-now text-3xl leading-tight text-azul md:text-4xl">
+          <h3 className="font-montserrat text-3xl font-bold leading-tight text-azul md:text-4xl">
             <span className="mr-4 font-blur">{dia.dia}</span>
             {dia.titulo}
           </h3>
-          <p className="mt-5 font-myriad text-lg leading-snug text-azul md:text-xl">
+          <p className="mt-5 font-montserrat text-lg leading-snug text-azul md:text-xl">
             {dia.descripcion}
           </p>
+
+          <button
+            type="button"
+            onClick={onVerGaleria}
+            className="mt-5 inline-flex w-fit items-center rounded-full bg-amarillo px-4 py-1.5 font-montserrat text-sm font-bold text-azul shadow-sm transition-transform duration-200 hover:scale-105"
+          >
+            Ver Galería de fotos
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export function Itinerario() {
+export function Itinerario({
+  galerias = {},
+}: {
+  galerias?: Record<string, string[]>;
+}) {
   const container = useRef<HTMLElement>(null);
   const [openId, setOpenId] = useState(itinerario[0]?.id ?? "");
+  const [galeriaAbierta, setGaleriaAbierta] = useState<DiaItinerario | null>(
+    null
+  );
+
+  // mientras no haya fotos cargadas en /public/images/galeria/<dia-id>/,
+  // el carrusel usa la imagen principal del día como única foto
+  const fotosDe = (dia: DiaItinerario) =>
+    galerias[dia.id]?.length ? galerias[dia.id] : [dia.imagen];
 
   useGSAP(
     () => {
@@ -169,9 +196,9 @@ export function Itinerario() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
-        <p className="itinerary-kicker font-myriad text-lg text-white md:text-xl">
+        <p className="itinerary-kicker font-montserrat text-lg text-white md:text-xl">
           Del{" "}
-          <strong className="font-helvetica-now">
+          <strong className="font-bold">
             Miércoles 2 al Viernes 11 de Septiembre
           </strong>
         </p>
@@ -196,7 +223,7 @@ export function Itinerario() {
                   <span className="font-blur text-4xl leading-none md:text-5xl">
                     {dia.dia}
                   </span>
-                  <span className="min-w-0 flex-1 font-helvetica-now text-2xl leading-tight md:text-3xl">
+                  <span className="min-w-0 flex-1 font-montserrat text-2xl font-bold leading-tight md:text-3xl">
                     {dia.titulo}
                   </span>
                   <Chevron open={isOpen} />
@@ -211,7 +238,10 @@ export function Itinerario() {
                   aria-hidden={!isOpen}
                 >
                   <div className="pt-5">
-                    <ItinerarioPanel dia={dia} />
+                    <ItinerarioPanel
+                      dia={dia}
+                      onVerGaleria={() => setGaleriaAbierta(dia)}
+                    />
                   </div>
                 </div>
               </div>
@@ -219,6 +249,14 @@ export function Itinerario() {
           })}
         </div>
       </div>
+
+      {galeriaAbierta && (
+        <GaleriaLightbox
+          titulo={`${galeriaAbierta.dia} — ${galeriaAbierta.titulo}`}
+          fotos={fotosDe(galeriaAbierta)}
+          onClose={() => setGaleriaAbierta(null)}
+        />
+      )}
     </section>
   );
 }
