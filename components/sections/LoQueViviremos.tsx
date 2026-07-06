@@ -8,7 +8,7 @@ import { vivencias, type Vivencia } from "@/lib/data/lo-que-viviremos";
 
 function VivenciaCard({ vivencia }: { vivencia: Vivencia }) {
   return (
-    <article className="vivencia-card group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-xl md:aspect-[5/6]">
+    <article className="vivencia-card group relative aspect-304/280 overflow-hidden rounded-[31px] shadow-xl">
       <Image
         src={vivencia.imagen}
         alt={vivencia.titulo}
@@ -18,10 +18,10 @@ function VivenciaCard({ vivencia }: { vivencia: Vivencia }) {
       />
       <div className="absolute inset-0 bg-linear-to-b from-black/0 via-black/5 to-black/70" />
       <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-5">
-        <h3 className="font-helvetica-now text-xl leading-none md:text-2xl">
+        <h3 className="font-montserrat text-xl font-bold leading-none md:text-2xl">
           {vivencia.titulo}
         </h3>
-        <p className="mt-1 font-myriad text-sm leading-tight text-white/85 md:text-base">
+        <p className="mt-1 font-montserrat text-sm leading-tight text-white/85 md:text-base">
           {vivencia.subtitulo}
         </p>
       </div>
@@ -80,7 +80,7 @@ export function LoQueViviremos() {
           LO QUE VIVIREMOS
         </h2>
 
-        <div className="vivencias-grid mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+        <div className="vivencias-grid mt-8 grid gap-x-5 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-5">
           {vivencias.map((vivencia) => (
             <VivenciaCard key={vivencia.id} vivencia={vivencia} />
           ))}
