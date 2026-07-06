@@ -24,7 +24,7 @@ function DestinoEnMapa({ destino }: { destino: DestinoMapa }) {
               className="object-cover"
             />
           </div>
-          <span className="absolute left-1/2 bottom-0 z-10 -translate-x-1/2 translate-y-1/2 whitespace-nowrap rounded-full bg-rojo-principal px-3 py-1 font-montserrat text-[10px] font-bold uppercase leading-none text-white shadow-md lg:text-xs">
+          <span className="absolute left-1/2 bottom-0 z-10 -translate-x-1/2 translate-y-1/2 whitespace-nowrap rounded-full border border-white bg-rojo-principal px-3 py-1 font-blur text-[10px] uppercase leading-none text-white shadow-md lg:text-xs">
             {destino.nombre}
           </span>
         </div>
@@ -61,7 +61,7 @@ function DestinoMobileCard({ destino }: { destino: DestinoMapa }) {
           className="object-cover"
         />
       </div>
-      <p className="mt-2 text-center font-montserrat text-[11px] font-semibold uppercase text-white">
+      <p className="mt-2 text-center font-blur text-[11px] uppercase text-white">
         {destino.nombre}
       </p>
     </article>
@@ -128,12 +128,16 @@ export function MapaDestinos() {
             );
         });
 
-        gsap.to(".map-vive-badge", {
-          rotation: 360,
-          duration: 20,
-          repeat: -1,
-          ease: "none",
-          transformOrigin: "50% 50%",
+        gsap.from(".mapa-intro", {
+          autoAlpha: 0,
+          y: 30,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 80%",
+            once: true,
+          },
         });
       });
 
@@ -170,6 +174,35 @@ export function MapaDestinos() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
+        <div className="mapa-intro mb-10 md:mb-12">
+          <p className="font-montserrat text-2xl font-bold text-white md:text-3xl">
+            Ruta:{" "}
+            <span className="font-blur text-3xl text-amarillo md:text-4xl">
+              8 DÍAS Y 7 NOCHES
+            </span>
+          </p>
+
+          <p className="mt-4 max-w-4xl font-montserrat text-lg text-white/90 md:text-xl">
+            Una travesía que recorre lo mejor de{" "}
+            <strong className="font-bold">República Dominicana</strong>,
+            desde playas{" "}
+            <strong className="font-bold">
+              paradisíacas, charcos y saltos
+            </strong>
+            , hasta encantadores pueblos costeros y vibrantes ciudades. De{" "}
+            <strong className="font-bold">norte</strong> a{" "}
+            <strong className="font-bold">sur</strong> y de este a oeste,
+            vivirás aventuras únicas en{" "}
+            <strong className="font-bold">
+              Puerto Plata, Río San Juan, Samaná, Santo Domingo y el Sur
+              profundo
+            </strong>
+            , conectando cada destino con cultura, naturaleza y la{" "}
+            <strong className="font-bold">esencia auténtica</strong> del{" "}
+            <strong className="font-bold">Caribe</strong>.
+          </p>
+        </div>
+
         <div className="hidden md:block">
           <div className="relative overflow-hidden rounded-3xl border-2 border-white/50 px-5 py-7 shadow-2xl lg:px-8 lg:py-9">
             <div className="relative mx-auto aspect-[3863/2653] w-full">
@@ -208,16 +241,6 @@ export function MapaDestinos() {
               ))}
             </div>
 
-            <div className="map-vive-badge absolute right-7 bottom-9 z-40 w-32 lg:right-10 lg:bottom-10 lg:w-48 xl:w-56">
-              <Image
-                src="/images/vive.png"
-                alt="Vive lo inesperado"
-                width={811}
-                height={812}
-                sizes="224px"
-                className="h-auto w-full"
-              />
-            </div>
           </div>
         </div>
 
@@ -227,7 +250,7 @@ export function MapaDestinos() {
           ))}
         </div>
 
-        <p className="mt-4 text-center font-myriad text-xs text-white/70">
+        <p className="mt-4 text-center font-montserrat text-xs text-white/70">
           **Mapa ilustrativo república dominicana
         </p>
       </div>
