@@ -6,6 +6,23 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { SplitTextReveal } from "@/components/animations/SplitTextReveal";
 import { MapaDestinos } from "@/components/sections/MapaDestinos";
+import {
+  CompassIcon,
+  LeafIcon,
+  LandmarkIcon,
+  PalmIcon,
+  UsersIcon,
+  UtensilsIcon,
+} from "@/components/shared/icons";
+
+const tagsHero = [
+  { label: "Aventura", Icon: CompassIcon },
+  { label: "Naturaleza", Icon: LeafIcon },
+  { label: "Cultura Local", Icon: LandmarkIcon },
+  { label: "Playas Paradisíacas", Icon: PalmIcon },
+  { label: "Viaje en Grupo", Icon: UsersIcon },
+  { label: "Gastronomía", Icon: UtensilsIcon },
+];
 
 export function Hero() {
   const container = useRef<HTMLElement>(null);
@@ -30,6 +47,13 @@ export function Hero() {
           ease: "power2.inOut",
           delay: 1.8,
         });
+        gsap.to(".hero-vive-img", {
+          rotation: 360,
+          duration: 20,
+          repeat: -1,
+          ease: "none",
+          transformOrigin: "50% 50%",
+        });
       });
     },
     { scope: container }
@@ -39,20 +63,22 @@ export function Hero() {
     <section ref={container} className="relative bg-azul">
       <div className="relative overflow-hidden">
         <Image
-          src="/images/samana.JPG"
-          alt="Vista aérea de una playa caribeña de arena blanca con palmeras y aguas turquesa en República Dominicana"
+          src="/images/pedernales-hero.jpg"
+          alt="Playa de aguas turquesa en Pedernales, República Dominicana, vista desde una cabaña con techo de palma"
           fill
           loading="eager"
           fetchPriority="high"
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-top"
         />
         <div
-          className="absolute inset-0 bg-linear-to-b from-azul/90 via-azul/50 to-azul/10"
+          className="absolute inset-0 bg-linear-to-b from-azul/85 via-azul/40 to-transparent"
           aria-hidden
         />
+        {/* funde la foto a azul sólido justo antes de la costura con MapaDestinos,
+            que arranca en azul sólido — sin esto queda un corte visible */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[48%] bg-linear-to-b from-azul/0 via-azul/85 to-azul"
+          className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-azul/0 to-azul md:h-56"
           aria-hidden
         />
 
@@ -67,14 +93,14 @@ export function Hero() {
             />
             <a
               href="#contacto"
-              className="font-montserrat text-sm text-white transition-opacity hover:opacity-80"
+              className="font-montserrat text-sm font-medium text-white transition-opacity hover:opacity-80"
             >
               Contacto
             </a>
           </header>
 
           <div className="mt-12 max-w-5xl md:mt-16 lg:mt-20">
-            <p className="hero-fade font-helvetica-now text-xl text-white md:text-2xl">
+            <p className="hero-fade font-montserrat text-xl font-bold text-white md:text-2xl">
               Explora
             </p>
 
@@ -87,7 +113,7 @@ export function Hero() {
             </SplitTextReveal>
 
             <p className="hero-fade mt-4 flex items-baseline gap-3 text-white">
-              <span className="font-myriad text-2xl md:text-3xl">
+              <span className="font-montserrat text-2xl font-bold md:text-3xl">
                 El corazón del
               </span>
               <span className="inline-block font-raices text-4xl text-white/80 md:text-5xl">
@@ -95,47 +121,43 @@ export function Hero() {
               </span>
             </p>
 
-            <p className="hero-fade mt-6 max-w-2xl font-myriad text-lg text-white md:text-xl">
+            <p className="hero-fade mt-6 max-w-2xl font-montserrat text-lg font-medium text-white md:text-xl">
               Una experiencia creada para quienes quieren descubrir el país
               desde otra perspectiva.
             </p>
 
             <a
-              href="#planes"
-              className="hero-fade hero-cta mt-8 inline-block rounded-full border-2 border-azul bg-amarillo px-10 py-4 font-blur text-3xl uppercase tracking-wide text-azul shadow-md md:text-4xl"
+              href="/reservar"
+              className="hero-fade hero-cta mt-8 inline-block rounded-full bg-amarillo px-10 py-4 font-blur text-3xl uppercase tracking-wide text-azul shadow-md md:text-4xl"
             >
               Reservar
             </a>
           </div>
 
-          <div className="mt-auto pt-24 md:pt-28">
-            <p className="hero-fade font-montserrat text-2xl text-white md:text-3xl">
-              Ruta:{" "}
-              <span className="font-blur text-3xl text-amarillo md:text-4xl">
-                8 DÍAS Y 7 NOCHES
-              </span>
-            </p>
-
-            <p className="hero-fade mt-4 max-w-4xl font-myriad text-lg text-white/90 md:text-xl">
-              Una travesía que recorre lo mejor de{" "}
-              <strong className="font-semibold">República Dominicana</strong>,
-              desde playas{" "}
-              <strong className="font-semibold">
-                paradisíacas, charcos y saltos
-              </strong>
-              , hasta encantadores pueblos costeros y vibrantes ciudades. De{" "}
-              <strong className="font-semibold">norte</strong> a{" "}
-              <strong className="font-semibold">sur</strong> y de este a oeste,
-              vivirás aventuras únicas en{" "}
-              <strong className="font-semibold">
-                Puerto Plata, Río San Juan, Samaná, Santo Domingo y el Sur
-                profundo
-              </strong>
-              , conectando cada destino con cultura, naturaleza y la{" "}
-              <strong className="font-semibold">esencia auténtica</strong> del{" "}
-              <strong className="font-semibold">Caribe</strong>.
-            </p>
+          <div className="hero-fade pointer-events-none absolute right-6 bottom-40 z-10 hidden w-36 md:block lg:right-12 lg:w-44 xl:w-52">
+            <Image
+              src="/images/vive.png"
+              alt="Vive lo inesperado — Alo Random"
+              width={811}
+              height={812}
+              sizes="208px"
+              className="hero-vive-img h-auto w-full"
+            />
           </div>
+
+          <ul className="hero-fade mt-auto flex max-w-3xl flex-wrap gap-2.5 pt-16 md:pt-20">
+            {tagsHero.map(({ label, Icon }) => (
+              <li
+                key={label}
+                className="flex items-center gap-1.5 rounded-full border border-white/60 bg-white/90 px-3.5 py-1.5 text-azul shadow-sm"
+              >
+                <Icon className="size-3.5 shrink-0" />
+                <span className="font-montserrat text-xs font-bold md:text-sm">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
