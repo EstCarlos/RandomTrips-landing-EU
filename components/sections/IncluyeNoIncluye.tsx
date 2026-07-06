@@ -139,7 +139,7 @@ export function IncluyeNoIncluye() {
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
         <div className="include-heading max-w-3xl">
-          <p className="font-myriad text-lg text-white/85 md:text-xl">
+          <p className="font-montserrat text-lg text-white/85 md:text-xl">
             Todo listo para moverte ligero
           </p>
           <h2 className="mt-4 font-blur text-5xl leading-none text-white md:text-6xl lg:text-7xl">
