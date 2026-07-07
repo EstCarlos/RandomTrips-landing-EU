@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { itinerario, type DiaItinerario } from "@/lib/data/itinerario";
 import { GaleriaLightbox } from "@/components/sections/GaleriaLightbox";
 
@@ -184,7 +185,7 @@ export function Itinerario({
   return (
     <section ref={container} className="relative overflow-hidden py-16 md:py-20 lg:py-24">
       <Image
-        src="/images/fondo-atras-mapa.png"
+        src={mediaUrl("landing/fondo-atras-mapa.png")}
         alt=""
         fill
         loading="eager"
