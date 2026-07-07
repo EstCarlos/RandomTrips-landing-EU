@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { categoriasFaq, preguntasFrecuentes } from "@/lib/data/faq";
 
 function Chevron({ open }: { open: boolean }) {
@@ -162,7 +163,7 @@ export function FAQ() {
       className="relative overflow-hidden bg-azul py-16 md:py-20 lg:py-24"
     >
       <Image
-        src="/images/TEXTURA3x.png"
+        src={mediaUrl("landing/TEXTURA3x.png")}
         alt=""
         fill
         sizes="100vw"
