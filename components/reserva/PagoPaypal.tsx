@@ -5,6 +5,7 @@ import {
   PayPalScriptProvider,
   PayPalButtons,
 } from "@paypal/react-paypal-js";
+import { apiUrl } from "@/lib/api";
 
 type ContactoReserva = {
   nombreCompleto: string;
@@ -43,7 +44,7 @@ export function PagoPaypal({
           style={{ layout: "vertical", label: "pay" }}
           createOrder={async () => {
             setError("");
-            const response = await fetch("/api/paypal/create-order", {
+            const response = await fetch(apiUrl("/paypal/create-order"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ planId, viajeros }),
@@ -58,7 +59,7 @@ export function PagoPaypal({
             return data.id as string;
           }}
           onApprove={async (data) => {
-            const response = await fetch("/api/paypal/capture-order", {
+            const response = await fetch(apiUrl("/paypal/capture-order"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
