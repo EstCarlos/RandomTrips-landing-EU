@@ -22,7 +22,7 @@ function BloqueParaTi({
     <div
       className={`parati-block max-w-3xl ${esPositivo ? "" : "md:ml-auto"}`}
     >
-      <h2 className="parati-title font-blur text-4xl leading-none text-azul md:text-5xl lg:text-6xl">
+      <h2 className="parati-title font-blur text-4xl leading-none text-white md:text-5xl lg:text-6xl">
         {titulo}
       </h2>
 
@@ -30,16 +30,12 @@ function BloqueParaTi({
         {items.map((item) => (
           <li key={item} className="parati-item flex items-start gap-4">
             <span
-              className={`parati-chip mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full ${
-                esPositivo
-                  ? "bg-amarillo text-azul"
-                  : "bg-rojo-principal text-white"
-              }`}
+              className="parati-chip mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-amarillo text-azul"
               aria-hidden
             >
               {esPositivo ? <CheckIcon /> : <XIcon />}
             </span>
-            <span className="font-montserrat text-base font-medium leading-snug text-azul md:text-lg">
+            <span className="font-montserrat text-base font-medium leading-snug text-white md:text-lg">
               {item}
             </span>
           </li>
@@ -99,9 +95,24 @@ export function ParaTi() {
   return (
     <section
       ref={container}
-      className="overflow-hidden bg-white py-16 md:py-20 lg:py-24"
+      className="relative overflow-hidden bg-azul py-16 md:py-20 lg:py-24"
     >
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+      <Image
+        src="/images/esto-es-para-ti.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover object-top"
+        aria-hidden
+      />
+
+      {/* degradado azul de abajo hacia arriba sobre la foto */}
+      <div
+        className="absolute inset-0 bg-linear-to-t from-azul via-azul/70 to-azul/15"
+        aria-hidden
+      />
+
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
         <BloqueParaTi
           titulo="ESTA EXPERIENCIA ES PARA TI SI:"
           items={esParaTiSi}
