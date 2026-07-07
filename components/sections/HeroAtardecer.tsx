@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 
 export function HeroAtardecer() {
   const container = useRef<HTMLElement>(null);
@@ -70,7 +71,7 @@ export function HeroAtardecer() {
   return (
     <section ref={container} className="relative overflow-hidden">
       <Image
-        src="/images/bahia.png"
+        src={mediaUrl("landing/bahia.png")}
         alt="Atardecer naranja sobre el mar caribeño con una lancha navegando en República Dominicana"
         fill
         sizes="100vw"
