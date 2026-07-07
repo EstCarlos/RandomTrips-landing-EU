@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { apiUrl } from "@/lib/api";
 
 type Estado = "idle" | "enviando" | "exito" | "error";
 
@@ -47,7 +48,7 @@ export function Contacto() {
     setErrorMsg("");
 
     try {
-      const response = await fetch("/api/contacto", {
+      const response = await fetch(apiUrl("/contacto"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, email, mensaje }),
