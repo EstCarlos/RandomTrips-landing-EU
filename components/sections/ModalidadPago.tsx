@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { planes, type Plan } from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
@@ -122,7 +123,7 @@ export function ModalidadPago() {
       className="relative bg-azul pt-20 pb-16 md:pt-24 md:pb-20 lg:pb-24"
     >
       <Image
-        src="/images/TEXTURA3x.png"
+        src={mediaUrl("landing/TEXTURA3x.png")}
         alt=""
         fill
         sizes="100vw"
@@ -133,7 +134,7 @@ export function ModalidadPago() {
       {/* sticker "Vive lo inesperado" montado sobre el borde con la sección Host */}
       <div className="pointer-events-none absolute right-6 top-0 z-20 w-28 -translate-y-1/2 md:right-16 md:w-36 lg:w-44">
         <Image
-          src="/images/vive.png"
+          src={mediaUrl("landing/vive.png")}
           alt="Vive lo inesperado — Alo Random"
           width={811}
           height={812}
