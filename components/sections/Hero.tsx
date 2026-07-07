@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { SplitTextReveal } from "@/components/animations/SplitTextReveal";
 import { MapaDestinos } from "@/components/sections/MapaDestinos";
 import {
@@ -63,7 +64,7 @@ export function Hero() {
     <section ref={container} className="relative bg-azul">
       <div className="relative overflow-hidden">
         <Image
-          src="/images/CayoLevantado.jpg"
+          src={mediaUrl("landing/CayoLevantado.jpg")}
           alt="Vista aérea de Cayo Levantado, isla de aguas turquesas y palmeras en Samaná, República Dominicana"
           fill
           loading="eager"
@@ -136,7 +137,7 @@ export function Hero() {
 
           <div className="hero-fade pointer-events-none absolute right-6 bottom-40 z-10 hidden w-36 md:block lg:right-12 lg:w-44 xl:w-52">
             <Image
-              src="/images/vive.png"
+              src={mediaUrl("landing/vive.png")}
               alt="Vive lo inesperado — Alo Random"
               width={811}
               height={812}
