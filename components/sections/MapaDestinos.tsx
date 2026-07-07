@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { destinosMapa, type DestinoMapa } from "@/lib/data/destinos-mapa";
 
 function DestinoEnMapa({ destino }: { destino: DestinoMapa }) {
@@ -36,7 +37,7 @@ function DestinoEnMapa({ destino }: { destino: DestinoMapa }) {
       >
         <div className="-translate-x-1/2 -translate-y-full">
           <Image
-            src="/images/punto-map.png"
+            src={mediaUrl("landing/punto-map.png")}
             alt=""
             width={238}
             height={304}
@@ -160,7 +161,7 @@ export function MapaDestinos() {
       className="relative w-full overflow-hidden py-12 md:py-16"
     >
       <Image
-        src="/images/fondo-atras-mapa.png"
+        src={mediaUrl("landing/fondo-atras-mapa.png")}
         alt=""
         fill
         loading="eager"
@@ -207,7 +208,7 @@ export function MapaDestinos() {
           <div className="relative overflow-hidden rounded-3xl border-2 border-white/50 px-5 py-7 shadow-2xl lg:px-8 lg:py-9">
             <div className="relative mx-auto aspect-[3863/2653] w-full">
               <Image
-                src="/images/MapaRD.png"
+                src={mediaUrl("landing/MapaRD.png")}
                 alt="Mapa ilustrativo de República Dominicana con destinos marcados"
                 fill
                 sizes="(max-width: 1280px) 94vw, 1280px"
