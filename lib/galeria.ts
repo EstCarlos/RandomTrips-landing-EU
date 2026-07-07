@@ -1,13 +1,16 @@
 import { readdirSync } from "fs";
 import path from "path";
 import { itinerario } from "@/lib/data/itinerario";
+import { mediaUrl } from "@/lib/media";
 
 const EXTENSIONES = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 
 /**
- * Lee las fotos de cada día desde /public/images/galeria/<dia-id>/.
- * Solo puede usarse en Server Components (usa fs). Basta con soltar las
- * fotos en la carpeta del día para que aparezcan en el carrusel.
+ * Detecta qué fotos tiene cada día leyendo /public/images/galeria/<dia-id>/
+ * (solo puede usarse en Server Components, usa fs), pero genera URLs del CDN
+ * (mismo key en el bucket S3). Al agregar fotos localmente hay que subirlas
+ * también con `aws s3 sync public/images/galeria s3://<bucket>/galeria/`
+ * para que la URL generada exista de verdad.
  */
 export function getGalerias(): Record<string, string[]> {
   const galerias: Record<string, string[]> = {};
@@ -21,10 +24,7 @@ export function getGalerias(): Record<string, string[]> {
           EXTENSIONES.has(path.extname(archivo).toLowerCase())
         )
         .sort()
-        .map(
-          (archivo) =>
-            `/images/galeria/${dia.id}/${encodeURIComponent(archivo)}`
-        );
+        .map((archivo) => mediaUrl(`galeria/${dia.id}/${archivo}`));
     } catch {
       galerias[dia.id] = [];
     }

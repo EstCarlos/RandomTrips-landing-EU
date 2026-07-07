@@ -1,3 +1,5 @@
+import { mediaUrl } from "@/lib/media";
+
 export type Host = {
   id: string;
   nombre: [string, string];
@@ -10,13 +12,13 @@ export const hosts: Host[] = [
     id: "bernat",
     nombre: ["Bernat", "Moreno"],
     rol: "Host / Creador",
-    foto: "/images/bernat.JPG",
+    foto: mediaUrl("landing/bernat.JPG"),
   },
   {
     id: "randy",
     nombre: ["Randy", "García"],
     rol: "Staff Random Trips",
-    foto: "/images/randy.jpg",
+    foto: mediaUrl("landing/randy.jpg"),
   },
 ];
 
