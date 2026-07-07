@@ -63,8 +63,8 @@ export function Hero() {
     <section ref={container} className="relative bg-azul">
       <div className="relative overflow-hidden">
         <Image
-          src="/images/pedernales-hero.jpg"
-          alt="Playa de aguas turquesa en Pedernales, República Dominicana, vista desde una cabaña con techo de palma"
+          src="/images/CayoLevantado.jpg"
+          alt="Vista aérea de Cayo Levantado, isla de aguas turquesas y palmeras en Samaná, República Dominicana"
           fill
           loading="eager"
           fetchPriority="high"
@@ -93,9 +93,9 @@ export function Hero() {
             />
             <a
               href="#contacto"
-              className="font-montserrat text-sm font-medium text-white transition-opacity hover:opacity-80"
+              className="font-montserrat text-lg font-medium text-white transition-opacity hover:opacity-80 md:text-xl"
             >
-              Contacto
+              Contáctanos
             </a>
           </header>
 
