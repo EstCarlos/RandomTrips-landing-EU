@@ -25,7 +25,7 @@ function ItinerarioPanel({
   onVerGaleria,
 }: {
   dia: DiaItinerario;
-  onVerGaleria: () => void;
+  onVerGaleria?: () => void;
 }) {
   return (
     <div className="itinerary-panel overflow-hidden rounded-3xl bg-white shadow-xl">
@@ -49,13 +49,15 @@ function ItinerarioPanel({
             {dia.descripcion}
           </p>
 
-          <button
-            type="button"
-            onClick={onVerGaleria}
-            className="mt-5 inline-flex w-fit items-center rounded-full bg-amarillo px-4 py-1.5 font-montserrat text-sm font-bold text-azul shadow-sm transition-transform duration-200 hover:scale-105"
-          >
-            Ver Galería de fotos
-          </button>
+          {onVerGaleria && (
+            <button
+              type="button"
+              onClick={onVerGaleria}
+              className="mt-5 inline-flex w-fit items-center rounded-full bg-amarillo px-4 py-1.5 font-montserrat text-sm font-bold text-azul shadow-sm transition-transform duration-200 hover:scale-105"
+            >
+              Ver Galería de fotos
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -240,7 +242,11 @@ export function Itinerario({
                   <div className="pt-5">
                     <ItinerarioPanel
                       dia={dia}
-                      onVerGaleria={() => setGaleriaAbierta(dia)}
+                      onVerGaleria={
+                        dia.id === "dia-9"
+                          ? undefined
+                          : () => setGaleriaAbierta(dia)
+                      }
                     />
                   </div>
                 </div>
