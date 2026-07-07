@@ -52,20 +52,22 @@ export function CTAFinal() {
   );
 
   return (
-    <section ref={container} className="relative overflow-hidden">
-      <Image
-        src="/images/bahia6.png"
-        alt="Playa de arena blanca con aguas turquesas en Bahía de las Águilas, República Dominicana"
-        fill
-        sizes="100vw"
-        className="object-cover object-top"
-      />
-
-      {/* degradado azul inferior sobre la foto */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-b from-azul/0 via-azul/75 to-azul"
-        aria-hidden
-      />
+    <section ref={container} className="relative overflow-hidden bg-azul">
+      {/* la foto va en el flujo con altura propia; la tarjeta se superpone con
+          margen negativo y debajo de la foto queda la banda azul sólida */}
+      <div className="relative h-85 w-full md:h-105 lg:aspect-1440/460 lg:h-auto">
+        <Image
+          src="/images/bahia6.png"
+          alt="Playa de arena blanca con aguas turquesas en Bahía de las Águilas, República Dominicana"
+          fill
+          sizes="100vw"
+          className="object-cover object-[50%_65%]"
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-b from-azul/0 via-azul/60 to-azul"
+          aria-hidden
+        />
+      </div>
 
       {/* textura de líneas topográficas sobre el degradado */}
       <Image
@@ -77,7 +79,7 @@ export function CTAFinal() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-24 pb-28 md:px-6 md:pt-28 md:pb-36 lg:pt-32 lg:pb-44">
+      <div className="relative z-10 mx-auto -mt-60 w-full max-w-6xl px-4 pb-24 md:-mt-72 md:px-6 md:pb-28 lg:-mt-90 lg:pb-32">
         <div className="cta-final-card rounded-[3rem] bg-white px-6 py-10 text-center shadow-2xl md:px-14 md:py-14">
           <h2 className="font-blur text-4xl leading-none text-azul md:text-5xl lg:text-6xl">
             ¿TE UNES A LA EXPERIENCIA?
