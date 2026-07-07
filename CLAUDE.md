@@ -315,7 +315,7 @@ Estos wrappers evitan que Claude Code reescriba lógica de GSAP en cada sección
 - Subtítulo: **"Del Miércoles 2 al Viernes 11 de Septiembre"**
 - Título: **"ITINERARIO DEL VIAJE"** *(el PDF dice "ITINERARARIO" — corregir typo)*
 
-Cada día abierto muestra un botón **"Ver Galería de fotos"** (pill amarilla) que abre un lightbox/carrusel (`GaleriaLightbox.tsx`): overlay oscuro, imagen central, flechas circulares blancas, X arriba a la derecha, navegación con teclado (Esc/←/→). Las fotos se leen del filesystem en `app/page.tsx` (server) vía `lib/galeria.ts`: **basta con soltar imágenes en `/public/images/galeria/<dia-id>/`** (dia-1 … dia-9) para que aparezcan; mientras una carpeta esté vacía se usa la imagen principal del día como única foto.
+Cada día abierto muestra un botón **"Ver Galería de fotos"** (pill amarilla) que abre un lightbox/carrusel (`GaleriaLightbox.tsx`): overlay oscuro, imagen central, flechas circulares blancas, X arriba a la derecha, navegación con teclado (Esc/←/→). `lib/galeria.ts` (server) detecta qué fotos tiene cada día leyendo `/public/images/galeria/<dia-id>/` (dia-1 … dia-9) pero genera **URLs del CDN de CloudFront** (`mediaUrl()` de `lib/media.ts`, bucket S3 del backend con los mismos keys `galeria/<dia-id>/...`): al agregar fotos locales hay que subirlas también con `aws s3 sync public/images/galeria s3://random-trips-media-<account>/galeria/`. Mientras una carpeta esté vacía se usa la imagen principal del día como única foto.
 
 Días (fuente: `/lib/data/itinerario.ts`):
 - **DIA 1** — Llegada a Santo Domingo · Libre
@@ -413,7 +413,7 @@ Sección standalone (ya NO va solapada sobre el hero atardecer). Fondo azul + te
 Después del FAQ, fondo blanco, `id="contacto"` (el link "Contáctanos" del header apunta aquí).
 - Título 2 líneas: **"¿MÁS PREGUNTAS?" / "CONTACTANOS"** (font-blur azul)
 - Form: nombre + correo (2 cols), textarea mensaje, botón "Enviar mensaje" (Montserrat bold, NO blur/uppercase — así está en el diseño)
-- `POST /api/contacto` → guarda en `data/mensajes.json` vía `lib/mensajes/store.ts` (**interino igual que reservas** — misma limitación en Vercel; reemplazar por backend real después)
+- `POST {API_BASE}/contacto` (backend `random-trips-backend-eu`, vía `apiUrl()` de `lib/api.ts`) → guarda el mensaje en DynamoDB y avisa por email (SES)
 
 ### 14. CTA final
 - Título: **"¿TE UNES A LA EXPERIENCIA?"**
@@ -436,20 +436,20 @@ Ruta nueva (`app/reservar/page.tsx`) a la que apuntan los 3 CTAs "RESERVAR" del 
 2. **Confirmar y pagar**: resumen + `PagoPaypal.tsx` (`@paypal/react-paypal-js`, `PayPalScriptProvider` + `PayPalButtons`).
 3. **Éxito**: `ReservaConfirmada.tsx`.
 
-Flujo de pago (nunca confiar en el monto que mande el cliente):
+Flujo de pago (nunca confiar en el monto que mande el cliente). El backend es el proyecto CDK **`random-trips-backend-eu`** (API Gateway + Lambdas + DynamoDB); los `fetch` usan `apiUrl()` de `lib/api.ts`:
 ```
-PayPalButtons.createOrder → POST /api/paypal/create-order { planId, viajeros }
-  → el servidor recalcula el total desde lib/data/planes.ts (lib/paypal/client.ts)
+PayPalButtons.createOrder → POST {API_BASE}/paypal/create-order { planId, viajeros }
+  → la Lambda recalcula el total desde su catálogo de planes (src/shared/planes.ts del backend)
   → crea la orden en PayPal REST (Sandbox) y devuelve { id }
 
-PayPalButtons.onApprove → POST /api/paypal/capture-order { orderId, planId, viajeros, contacto }
+PayPalButtons.onApprove → POST {API_BASE}/paypal/capture-order { orderId, planId, viajeros, contacto }
   → captura el pago en PayPal
-  → si status COMPLETED: guarda la reserva vía lib/reservas/store.ts
+  → si status COMPLETED: guarda la reserva en DynamoDB (idempotente por orderId) y avisa por SES
 ```
 
-**Persistencia interina**: `lib/reservas/store.ts` escribe cada reserva pagada en `data/reservas.json` (gitignorado). Es un cajón temporal mientras no existe el backend real — **en Vercel el filesystem de producción no persiste entre invocaciones**, así que esto solo es confiable en `npm run dev` / local. Cuando exista el backend real, reemplazar únicamente `appendReserva()` por la llamada a ese backend; el resto del flujo no cambia.
+**Persistencia**: DynamoDB (tabla `random-trips`) vía el backend. Las API routes de Next (`app/api/`) y los stores JSON (`lib/reservas/`, `lib/mensajes/`, `lib/paypal/`) fueron **eliminados** — no reintroducirlos. Los precios de `lib/data/planes.ts` son solo para pintar la UI; la fuente de verdad del cobro vive en el backend y ambos deben mantenerse sincronizados.
 
-**Variables de entorno** (`.env.local`, ver `.env.example`): `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_API_BASE` (Sandbox por default), `NEXT_PUBLIC_PAYPAL_CLIENT_ID` (mismo valor que `PAYPAL_CLIENT_ID`, expuesto al cliente para el SDK — el Client ID no es secreto, el Secret sí). Las credenciales Sandbox reales viven en `credentials_paypal.json` en la raíz (gitignorado, nunca commitear ni leer desde código — solo para copiarlas manualmente a `.env.local`).
+**Variables de entorno** (`.env.local`, ver `.env.example`): `NEXT_PUBLIC_PAYPAL_CLIENT_ID` (carga el SDK de botones; el Client ID no es secreto), `NEXT_PUBLIC_API_BASE` (URL del API Gateway, output `ApiUrl` del stack `RandomTrips-Api`), `NEXT_PUBLIC_MEDIA_CDN_DOMAIN` (CloudFront de fotos, output del stack `RandomTrips-Media`). El **Client Secret ya no existe en este repo**: vive en SSM Parameter Store del backend (`/random-trips/paypal/*`). `credentials_paypal.json` en la raíz sigue gitignorado (nunca commitear ni leer desde código).
 
 ## Responsive
 
