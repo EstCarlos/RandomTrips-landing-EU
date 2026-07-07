@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 
 // TODO: número real de WhatsApp
 const WHATSAPP_URL =
@@ -57,7 +58,7 @@ export function CTAFinal() {
           margen negativo y debajo de la foto queda la banda azul sólida */}
       <div className="relative h-85 w-full md:h-105 lg:aspect-1440/460 lg:h-auto">
         <Image
-          src="/images/bahia6.png"
+          src={mediaUrl("landing/bahia6.png")}
           alt="Playa de arena blanca con aguas turquesas en Bahía de las Águilas, República Dominicana"
           fill
           sizes="100vw"
@@ -71,7 +72,7 @@ export function CTAFinal() {
 
       {/* textura de líneas topográficas sobre el degradado */}
       <Image
-        src="/images/TEXTURA3x.png"
+        src={mediaUrl("landing/TEXTURA3x.png")}
         alt=""
         fill
         sizes="100vw"
