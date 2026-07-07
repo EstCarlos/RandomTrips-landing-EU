@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
+import { mediaUrl } from "@/lib/media";
 import { esParaTiSi, noEsParaTiSi } from "@/lib/data/para-ti";
 import { CheckIcon, XIcon } from "@/components/shared/icons";
 
@@ -98,7 +99,7 @@ export function ParaTi() {
       className="relative overflow-hidden bg-azul py-16 md:py-20 lg:py-24"
     >
       <Image
-        src="/images/esto-es-para-ti.jpg"
+        src={mediaUrl("landing/esto-es-para-ti.jpg")}
         alt=""
         fill
         sizes="100vw"
@@ -122,7 +123,7 @@ export function ParaTi() {
         <div className="mt-16 flex flex-col items-center gap-12 md:mt-24 md:flex-row md:justify-between md:gap-16">
           <div className="w-44 shrink-0 md:w-56 lg:w-64">
             <Image
-              src="/images/vive.png"
+              src={mediaUrl("landing/vive.png")}
               alt="Vive lo inesperado — Alo Random"
               width={811}
               height={812}
