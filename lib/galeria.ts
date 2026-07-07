@@ -21,7 +21,10 @@ export function getGalerias(): Record<string, string[]> {
           EXTENSIONES.has(path.extname(archivo).toLowerCase())
         )
         .sort()
-        .map((archivo) => `/images/galeria/${dia.id}/${archivo}`);
+        .map(
+          (archivo) =>
+            `/images/galeria/${dia.id}/${encodeURIComponent(archivo)}`
+        );
     } catch {
       galerias[dia.id] = [];
     }
