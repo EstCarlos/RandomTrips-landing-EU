@@ -38,7 +38,7 @@ export function PagoPaypal({
   return (
     <div>
       <PayPalScriptProvider
-        options={{ clientId, currency: "USD", intent: "capture" }}
+        options={{ clientId, currency: "EUR", intent: "capture" }}
       >
         <PayPalButtons
           style={{ layout: "vertical", label: "pay" }}
@@ -58,7 +58,7 @@ export function PagoPaypal({
             const data = await response.json();
             return data.id as string;
           }}
-          onApprove={async (data) => {
+          onApprove={async (data, actions) => {
             const response = await fetch(apiUrl("/paypal/capture-order"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -72,6 +72,17 @@ export function PagoPaypal({
 
             if (!response.ok) {
               const body = await response.json().catch(() => ({}));
+
+              // Tarjeta rechazada por el banco: reiniciar el checkout para
+              // que el cliente reintente con otro método sin perder el flujo.
+              if (body.code === "INSTRUMENT_DECLINED") {
+                setError(
+                  body.error ??
+                    "La tarjeta fue rechazada. Intenta con otra tarjeta u otro método de pago."
+                );
+                return actions.restart();
+              }
+
               setError(body.error ?? "No se pudo confirmar el pago");
               return;
             }

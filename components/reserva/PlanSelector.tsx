@@ -27,23 +27,33 @@ export function PlanSelector({
                 : "border-black/10 bg-white text-azul hover:border-azul/40"
             }`}
           >
-            {plan.destacado && (
-              <span
-                className={`absolute -top-3 left-5 rounded-full px-3 py-1 font-montserrat text-xs font-bold uppercase ${
-                  selected ? "bg-amarillo text-azul" : "bg-amarillo text-azul"
-                }`}
-              >
-                Más elegido
+            {plan.badge && (
+              <span className="absolute -top-3 left-5 rounded-full bg-amarillo px-3 py-1 font-montserrat text-xs font-bold uppercase text-azul">
+                {plan.badge}
               </span>
             )}
 
             <h3 className="font-blur text-3xl leading-none">{plan.nombre}</h3>
             <p className="mt-2 font-montserrat text-2xl font-bold">
-              ${plan.precioPorPersona.toLocaleString("en-US")}
+              EUR${plan.precioPorPersona.toLocaleString("en-US")}
               <span className="ml-1 text-sm font-medium opacity-80">
                 / persona
               </span>
             </p>
+
+            {plan.reserva !== undefined && plan.saldo !== undefined && (
+              <p className="mt-1 font-montserrat text-xs font-medium opacity-80">
+                Reserva EUR${plan.reserva.toLocaleString("en-US")} · Saldo EUR$
+                {plan.saldo.toLocaleString("en-US")}
+              </p>
+            )}
+
+            {plan.cuotas && (
+              <p className="mt-1 font-montserrat text-xs font-bold">
+                {plan.cuotas.cantidad} cuotas mensuales de EUR$
+                {plan.cuotas.monto.toFixed(2)}
+              </p>
+            )}
 
             <ul className="mt-4 space-y-2">
               {plan.incluye.map((item) => (

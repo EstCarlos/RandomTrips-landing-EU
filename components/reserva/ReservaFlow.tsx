@@ -4,7 +4,12 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { planes } from "@/lib/data/planes";
+import {
+  planes,
+  calcularPagoInicial,
+  calendarioCuotas,
+  type Plan,
+} from "@/lib/data/planes";
 import { PlanSelector } from "@/components/reserva/PlanSelector";
 import { ViajerosForm } from "@/components/reserva/ViajerosForm";
 import { PagoPaypal } from "@/components/reserva/PagoPaypal";
@@ -13,6 +18,103 @@ import { ReservaConfirmada } from "@/components/reserva/ReservaConfirmada";
 type Paso = "formulario" | "pago" | "exito";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function formatearEUR(monto: number): string {
+  return `EUR$${monto.toLocaleString("en-US", {
+    minimumFractionDigits: monto % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function formatearFecha(fecha: Date): string {
+  return fecha.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+/**
+ * Desglose de lo que se paga hoy y el calendario de cuotas del saldo.
+ * En planes de pago único solo muestra el total.
+ */
+function ResumenPago({
+  plan,
+  cantidadViajeros,
+}: {
+  plan: Plan;
+  cantidadViajeros: number;
+}) {
+  const total = plan.precioPorPersona * cantidadViajeros;
+  const pagoHoy = calcularPagoInicial(plan, cantidadViajeros);
+  const cuotas = calendarioCuotas(plan, cantidadViajeros);
+  const conCuotas = cuotas.length > 0;
+
+  return (
+    <div className="rounded-2xl bg-crema px-5 py-4">
+      <div className="flex items-center justify-between">
+        <span className="font-montserrat text-sm font-bold text-azul">
+          {conCuotas ? "Pagas hoy (reserva)" : "Total"} ({cantidadViajeros}{" "}
+          viajero{cantidadViajeros > 1 ? "s" : ""})
+        </span>
+        <span className="font-blur text-2xl text-azul">
+          {formatearEUR(pagoHoy)}
+        </span>
+      </div>
+
+      {conCuotas && (
+        <>
+          <hr className="my-3 border-azul/10" />
+
+          <p className="font-montserrat text-sm text-ink">
+            Saldo restante:{" "}
+            <strong className="font-bold">
+              {formatearEUR(total - pagoHoy)}
+            </strong>{" "}
+            en {plan.cuotas!.cantidad} cuotas mensuales
+            {cantidadViajeros > 1 && (
+              <span className="text-ink/70">
+                {" "}
+                (EUR${plan.cuotas!.monto.toFixed(2)} × {cantidadViajeros}{" "}
+                viajeros por cuota)
+              </span>
+            )}
+            :
+          </p>
+
+          <ul className="mt-2 space-y-1">
+            {cuotas.map((cuota) => (
+              <li
+                key={cuota.numero}
+                className="flex items-center justify-between font-montserrat text-sm text-ink"
+              >
+                <span>
+                  Cuota {cuota.numero} — {formatearFecha(cuota.fecha)}
+                </span>
+                <span className="font-bold">{formatearEUR(cuota.monto)}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-3 font-montserrat text-xs leading-snug text-ink/60">
+            Fechas estimadas a partir de hoy. Recibirás un link de pago por
+            email para cada cuota; puedes adelantar cuotas o completar el pago
+            en cualquier momento antes de la fecha límite.
+          </p>
+
+          <div className="mt-3 flex items-center justify-between border-t border-azul/10 pt-3">
+            <span className="font-montserrat text-sm font-bold text-azul">
+              Total del viaje
+            </span>
+            <span className="font-montserrat text-base font-bold text-azul">
+              {formatearEUR(total)}
+            </span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export function ReservaFlow() {
   const container = useRef<HTMLDivElement>(null);
@@ -27,7 +129,6 @@ export function ReservaFlow() {
   const [reservaId, setReservaId] = useState("");
 
   const plan = planes.find((p) => p.id === planId);
-  const total = plan ? plan.precioPorPersona * viajeros.length : 0;
 
   useGSAP(
     () => {
@@ -179,14 +280,11 @@ export function ReservaFlow() {
             </div>
           </div>
 
-          <div className="mt-8 flex items-center justify-between rounded-2xl bg-crema px-5 py-4">
-            <span className="font-montserrat text-sm font-bold text-azul">
-              Total ({viajeros.length} viajero{viajeros.length > 1 ? "s" : ""})
-            </span>
-            <span className="font-blur text-2xl text-azul">
-              ${total.toLocaleString("en-US")}
-            </span>
-          </div>
+          {plan && (
+            <div className="mt-8">
+              <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
+            </div>
+          )}
 
           <button
             type="submit"
@@ -215,9 +313,10 @@ export function ReservaFlow() {
               <strong className="font-bold">Titular:</strong> {nombreCompleto} —{" "}
               {email}
             </p>
-            <p className="font-montserrat text-lg font-bold text-azul">
-              Total: ${total.toLocaleString("en-US")}
-            </p>
+          </div>
+
+          <div className="mt-4">
+            <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
           </div>
 
           <div className="mt-6">
@@ -242,7 +341,9 @@ export function ReservaFlow() {
         </div>
       )}
 
-      {paso === "exito" && <ReservaConfirmada reservaId={reservaId} />}
+      {paso === "exito" && (
+        <ReservaConfirmada reservaId={reservaId} plan={plan} />
+      )}
 
       {paso !== "exito" && (
         <p className="mt-6 text-center">
