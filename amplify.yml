@@ -7,9 +7,6 @@ frontend:
     build:
       commands:
         - env | grep -e NEXT_PUBLIC_ >> .env.production
-        - env | grep -e PAYPAL_API_BASE >> .env.production
-        - env | grep -e PAYPAL_CLIENT_SECRET >> .env.production
-        - env | grep -e PAYPAL_CLIENT_ID >> .env.production      
         - npm run build
   artifacts:
     baseDirectory: .next
