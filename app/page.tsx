@@ -11,6 +11,7 @@ import { LoQueViviremos } from "../components/sections/LoQueViviremos";
 import { ModalidadPago } from "../components/sections/ModalidadPago";
 import { ParaTi } from "../components/sections/ParaTi";
 import { Sponsors } from "../components/sections/Sponsors";
+import { Preloader } from "../components/shared/Preloader";
 import { getGalerias } from "../lib/galeria";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
 
   return (
     <main className="flex-1">
+      <Preloader />
       <Hero />
       <LoQueViviremos />
       <Itinerario galerias={galerias} />

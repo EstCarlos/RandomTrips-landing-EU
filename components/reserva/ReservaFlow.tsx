@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import {
@@ -118,8 +119,14 @@ function ResumenPago({
 
 export function ReservaFlow() {
   const container = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const planIdDesdeUrl = searchParams.get("plan");
   const [paso, setPaso] = useState<Paso>("formulario");
-  const [planId, setPlanId] = useState(planes[0]?.id ?? "");
+  const [planId, setPlanId] = useState(
+    (planIdDesdeUrl && planes.some((p) => p.id === planIdDesdeUrl)
+      ? planIdDesdeUrl
+      : planes[0]?.id) ?? ""
+  );
   const [viajeros, setViajeros] = useState<string[]>([""]);
   const [nombreCompleto, setNombreCompleto] = useState("");
   const [email, setEmail] = useState("");

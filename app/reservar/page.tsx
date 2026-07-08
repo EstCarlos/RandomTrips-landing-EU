@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ReservaFlow } from "@/components/reserva/ReservaFlow";
@@ -38,7 +39,9 @@ export default function ReservarPage() {
         </h1>
 
         <div className="mt-8">
-          <ReservaFlow />
+          <Suspense fallback={null}>
+            <ReservaFlow />
+          </Suspense>
         </div>
       </div>
     </main>
