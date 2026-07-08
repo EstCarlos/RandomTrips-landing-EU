@@ -14,8 +14,8 @@ import { Sponsors } from "../components/sections/Sponsors";
 import { Preloader } from "../components/shared/Preloader";
 import { getGalerias } from "../lib/galeria";
 
-export default function Home() {
-  const galerias = getGalerias();
+export default async function Home() {
+  const galerias = await getGalerias();
 
   return (
     <main className="flex-1">
