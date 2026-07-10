@@ -34,7 +34,7 @@ export function BandaPDF() {
 
   return (
     <section ref={container} className="bg-rojo-principal py-10 md:py-12">
-      <div className="banda-pdf-inner mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 text-center md:flex-row md:justify-between md:px-6 md:text-left">
+      <div className="banda-pdf-inner mx-auto flex w-full max-w-7xl flex-col items-center gap-6 px-4 text-center md:flex-row md:justify-between md:px-6 md:text-left">
         <h2 className="max-w-xl font-blur text-3xl leading-[1.05] text-crema md:text-4xl">
           ¿QUIERES EL PDF CON TODA LA INFO EN DETALLE?
         </h2>

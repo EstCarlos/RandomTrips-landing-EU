@@ -78,7 +78,7 @@ Las fuentes se registran como CSS variables en `app/globals.css` bajo `@theme in
 - Cards: `rounded-2xl`
 - Contenedores grandes (bloques azules): `rounded-3xl`
 - Spacing entre secciones: `py-16 md:py-20 lg:py-24`
-- Container: `max-w-6xl mx-auto px-4 md:px-6`
+- Container: `max-w-7xl mx-auto px-4 md:px-6` (compartido por TODAS las secciones de la landing para que el margen izquierdo quede alineado en toda la página)
 
 ## Estructura de carpetas
 

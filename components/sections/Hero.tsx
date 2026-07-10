@@ -83,7 +83,7 @@ export function Hero() {
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-8 md:px-6 md:py-10">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-8 md:px-6 md:py-10">
           <header className="flex items-center justify-between">
             <Image
               src="/logos/random-trips-logo.svg"

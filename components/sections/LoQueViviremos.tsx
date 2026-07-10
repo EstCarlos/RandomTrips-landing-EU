@@ -72,7 +72,7 @@ export function LoQueViviremos() {
 
   return (
     <section ref={container} className="bg-white py-16 md:py-20 lg:py-24">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <h2 className="vivencias-title font-blur text-5xl leading-none text-azul md:text-6xl lg:text-7xl">
           LO QUE VIVIREMOS
         </h2>

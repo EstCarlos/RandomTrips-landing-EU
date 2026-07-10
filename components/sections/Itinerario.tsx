@@ -198,7 +198,7 @@ export function Itinerario({
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <p className="itinerary-kicker font-montserrat text-lg text-white md:text-xl">
           Del{" "}
           <strong className="font-bold">

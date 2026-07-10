@@ -168,7 +168,7 @@ export function ModalidadPago() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="pago-heading">
           <h2 className="font-blur text-5xl leading-none text-white md:text-6xl lg:text-7xl">
             MODALIDAD DE PAGO

@@ -171,7 +171,7 @@ export function FAQ() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <h2 className="faq-title font-blur text-4xl leading-none text-white md:text-5xl lg:text-6xl">
           PREGUNTAS FRECUENTES
         </h2>

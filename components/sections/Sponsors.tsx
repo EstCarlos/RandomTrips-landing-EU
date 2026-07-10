@@ -33,7 +33,7 @@ export function Sponsors() {
 
   return (
     <section ref={container} className="relative bg-amarillo py-10 md:py-12">
-      <div className="sponsors-inner mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-6 px-4 md:gap-x-14 md:px-6">
+      <div className="sponsors-inner mx-auto flex w-full max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-6 px-4 md:gap-x-14 md:px-6">
         <p className="font-montserrat text-sm font-semibold text-azul md:text-base">
           Experiencia por:
         </p>

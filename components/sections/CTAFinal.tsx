@@ -78,7 +78,7 @@ export function CTAFinal() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto -mt-60 w-full max-w-6xl px-4 pb-24 md:-mt-72 md:px-6 md:pb-28 lg:-mt-90 lg:pb-32">
+      <div className="relative z-10 mx-auto -mt-60 w-full max-w-7xl px-4 pb-24 md:-mt-72 md:px-6 md:pb-28 lg:-mt-90 lg:pb-32">
         <div className="cta-final-card rounded-[3rem] bg-white px-6 py-10 text-center shadow-2xl md:px-14 md:py-14">
           <h2 className="font-blur text-4xl leading-none text-azul md:text-5xl lg:text-6xl">
             ¿TE UNES A LA EXPERIENCIA?

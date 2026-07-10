@@ -176,7 +176,7 @@ export function MapaDestinos() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="mapa-intro mb-10 md:mb-12">
           <p className="font-montserrat text-2xl font-bold text-white md:text-3xl">
             Ruta:{" "}
