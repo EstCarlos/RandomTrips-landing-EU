@@ -134,6 +134,7 @@ export function ReservaFlow() {
   const [errores, setErrores] = useState<Record<string, string>>({});
   const [erroresViajeros, setErroresViajeros] = useState<Record<number, string>>({});
   const [reservaId, setReservaId] = useState("");
+  const [pagoEnProceso, setPagoEnProceso] = useState(false);
 
   const plan = planes.find((p) => p.id === planId);
 
@@ -304,47 +305,71 @@ export function ReservaFlow() {
 
       {paso === "pago" && plan && (
         <div className="reserva-paso mx-auto max-w-xl rounded-3xl bg-white p-6 shadow-2xl md:p-10">
-          <h2 className="font-blur text-3xl leading-none text-azul md:text-4xl">
-            Confirmar y pagar
-          </h2>
+          {/* Pantalla de espera mientras el backend captura el pago (2-3s):
+              sin ella, el cliente vuelve a ver "Confirmar y pagar" un instante
+              y puede pensar que el pago no se efectuó. */}
+          {pagoEnProceso && (
+            <div className="flex flex-col items-center py-14 text-center">
+              <div
+                className="h-12 w-12 animate-spin rounded-full border-4 border-azul border-t-transparent"
+                aria-hidden
+              />
+              <h2 className="mt-6 font-blur text-3xl leading-none text-azul md:text-4xl">
+                Procesando tu pago
+              </h2>
+              <p className="mt-3 max-w-sm font-montserrat text-sm leading-relaxed text-ink/70">
+                Estamos confirmando tu pago y registrando tu reserva. No
+                cierres ni recargues esta página.
+              </p>
+            </div>
+          )}
 
-          <div className="mt-5 space-y-2 rounded-2xl bg-crema p-5">
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Plan:</strong> {plan.nombre}
-            </p>
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Viajeros:</strong>{" "}
-              {viajeros.join(", ")}
-            </p>
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Titular:</strong> {nombreCompleto} —{" "}
-              {email}
-            </p>
+          {/* El contenido queda montado (oculto) para no desmontar los botones
+              de PayPal a mitad de la captura. */}
+          <div className={pagoEnProceso ? "hidden" : ""}>
+            <h2 className="font-blur text-3xl leading-none text-azul md:text-4xl">
+              Confirmar y pagar
+            </h2>
+
+            <div className="mt-5 space-y-2 rounded-2xl bg-crema p-5">
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Plan:</strong> {plan.nombre}
+              </p>
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Viajeros:</strong>{" "}
+                {viajeros.join(", ")}
+              </p>
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Titular:</strong> {nombreCompleto} —{" "}
+                {email}
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
+            </div>
+
+            <div className="mt-6">
+              <PagoPaypal
+                planId={planId}
+                viajeros={viajeros}
+                contacto={{ nombreCompleto, email, telefono }}
+                onProcesandoChange={setPagoEnProceso}
+                onSuccess={(id) => {
+                  setReservaId(id);
+                  setPaso("exito");
+                }}
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPaso("formulario")}
+              className="mt-4 w-full font-montserrat text-sm font-medium text-azul underline"
+            >
+              Volver a editar mis datos
+            </button>
           </div>
-
-          <div className="mt-4">
-            <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
-          </div>
-
-          <div className="mt-6">
-            <PagoPaypal
-              planId={planId}
-              viajeros={viajeros}
-              contacto={{ nombreCompleto, email, telefono }}
-              onSuccess={(id) => {
-                setReservaId(id);
-                setPaso("exito");
-              }}
-            />
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setPaso("formulario")}
-            className="mt-4 w-full font-montserrat text-sm font-medium text-azul underline"
-          >
-            Volver a editar mis datos
-          </button>
         </div>
       )}
 
