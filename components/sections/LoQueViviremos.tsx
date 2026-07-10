@@ -37,7 +37,7 @@ export function LoQueViviremos() {
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.from(".vivencias-eyebrow, .vivencias-title", {
+        gsap.from(".vivencias-title", {
           opacity: 0,
           y: 28,
           duration: 0.9,
@@ -73,10 +73,7 @@ export function LoQueViviremos() {
   return (
     <section ref={container} className="bg-white py-16 md:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
-        <p className="vivencias-eyebrow inline-flex rounded-full bg-black/8 px-3 py-1 font-montserrat text-sm font-bold text-black/25 md:text-base">
-          Nuestros destinos
-        </p>
-        <h2 className="vivencias-title mt-5 font-blur text-5xl leading-none text-azul md:text-6xl lg:text-7xl">
+        <h2 className="vivencias-title font-blur text-5xl leading-none text-azul md:text-6xl lg:text-7xl">
           LO QUE VIVIREMOS
         </h2>
 

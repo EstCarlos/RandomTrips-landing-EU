@@ -425,7 +425,7 @@ Después del FAQ, fondo blanco, `id="contacto"` (el link "Contáctanos" del head
 
 - **Acordeones**: shadcn Accordion, `type="single" collapsible`
 - **RESERVAR**: `<a href="/reservar">` — lleva a la página de reserva/checkout (ver sección siguiente)
-- **WHATSAPP**: `https://wa.me/1809XXXXXXX?text=Hola%2C%20quiero%20info%20del%20viaje%20a%20RD` <!-- TODO: número -->
+- **WHATSAPP**: `https://wa.link/ayrgeu`
 - **DESCARGAR PDF**: link a `/random-trips-rd.pdf`
 
 ## Página de reserva (`/reservar`)

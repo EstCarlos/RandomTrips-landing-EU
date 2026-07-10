@@ -26,7 +26,7 @@ function TarjetaLista({
       }`}
     >
       <p
-        className={`inline-flex -rotate-2 rounded-full px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider ${
+        className={`inline-flex rounded-full px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider ${
           isIncluded ? "bg-amarillo text-azul" : "bg-white text-rojo-principal"
         }`}
       >

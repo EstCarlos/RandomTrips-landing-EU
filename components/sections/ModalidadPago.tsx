@@ -18,7 +18,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       } ${resaltado ? "ring-2 ring-azul" : ""}`}
     >
       {plan.badge && (
-        <span className="absolute -top-4 left-6 -rotate-2 rounded-full bg-amarillo px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider text-azul shadow-sm">
+        <span className="absolute -top-4 left-6 rounded-full bg-amarillo px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider text-azul shadow-sm">
           {plan.badge}
         </span>
       )}
@@ -178,7 +178,7 @@ export function ModalidadPago() {
           </p>
         </div>
 
-        <div className="pago-grid mt-12 grid items-end gap-6 md:mt-24 md:grid-cols-3 md:gap-7">
+        <div className="pago-grid mt-8 grid items-end gap-6 md:mt-10 md:grid-cols-3 md:gap-7">
           {planes.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
@@ -203,17 +203,9 @@ export function ModalidadPago() {
           </ul>
         </div>
 
-        <p className="mt-10 text-justify font-montserrat text-base leading-relaxed text-white/90 md:mt-12 md:text-lg">
-          Una travesía que recorre lo mejor de{" "}
-          <strong className="font-bold">República Dominicana</strong>, desde
-          playas <strong className="font-bold">paradisíacas, charcos y saltos</strong>,
-          hasta encantadores pueblos costeros y vibrantes ciudades. De{" "}
-          <strong className="font-bold">norte</strong> a{" "}
-          <strong className="font-bold">sur</strong> y de{" "}
-          <strong className="font-bold">este</strong> a{" "}
-          <strong className="font-bold">oeste</strong>, vivirás aventuras únicas
-          conectando cada destino con cultura, naturaleza y la esencia auténtica
-          del Caribe.
+        {/* TODO: el socio aún no define la fecha límite de pago — reemplazar el placeholder */}
+        <p className="mt-10 text-center font-montserrat text-base font-bold leading-relaxed text-white md:mt-12 md:text-lg">
+          [Aquí va la fecha límite de pago]
         </p>
       </div>
     </section>

@@ -12,11 +12,13 @@ function DestinoEnMapa({ destino }: { destino: DestinoMapa }) {
     <>
       {/* anclaje en div interno: GSAP anima el wrapper y pisaría su translate */}
       <div
-        className="map-destination-photo absolute z-20 w-28 md:w-32 lg:w-40"
+        className={`map-destination-photo absolute z-20 ${destino.fotoAncho}`}
         style={{ top: destino.fotoPos.top, left: destino.fotoPos.left }}
       >
         <div className="-translate-x-1/2 -translate-y-1/2">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-white shadow-lg">
+          <div
+            className={`relative overflow-hidden rounded-xl border-2 border-white shadow-lg ${destino.fotoAspecto}`}
+          >
             <Image
               src={destino.imagen}
               alt={`Vista de ${destino.nombre}`}
@@ -174,7 +176,7 @@ export function MapaDestinos() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
         <div className="mapa-intro mb-10 md:mb-12">
           <p className="font-montserrat text-2xl font-bold text-white md:text-3xl">
             Ruta:{" "}
@@ -205,7 +207,7 @@ export function MapaDestinos() {
         </div>
 
         <div className="hidden md:block">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-white/50 px-5 py-7 shadow-2xl lg:px-8 lg:py-9">
+          <div className="relative">
             <div className="relative mx-auto aspect-[3863/2653] w-full">
               <Image
                 src={mediaUrl("landing/MapaRD.png")}

@@ -6,9 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
 
-// TODO: número real de WhatsApp
-const WHATSAPP_URL =
-  "https://wa.me/1809XXXXXXX?text=Hola%2C%20quiero%20info%20del%20viaje%20a%20RD";
+const WHATSAPP_URL = "https://wa.link/ayrgeu";
 
 export function CTAFinal() {
   const container = useRef<HTMLElement>(null);
