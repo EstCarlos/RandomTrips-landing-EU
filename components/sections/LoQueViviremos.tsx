@@ -77,7 +77,7 @@ export function LoQueViviremos() {
           LO QUE VIVIREMOS
         </h2>
 
-        <div className="vivencias-grid mt-8 grid gap-x-5 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-5">
+        <div className="vivencias-grid mt-8 grid gap-x-5 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10.5 lg:gap-y-4.5">
           {vivencias.map((vivencia) => (
             <VivenciaCard key={vivencia.id} vivencia={vivencia} />
           ))}
