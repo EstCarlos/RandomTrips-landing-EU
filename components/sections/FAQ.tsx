@@ -10,12 +10,12 @@ import { categoriasFaq, preguntasFrecuentes } from "@/lib/data/faq";
 function Chevron({ open }: { open: boolean }) {
   return (
     <span
-      className={`flex size-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 md:size-11 ${
+      className={`flex size-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 md:size-9 ${
         open ? "bg-black/10" : "bg-amarillo"
       }`}
     >
       <span
-        className={`size-3 rotate-45 border-r-[3px] border-b-[3px] border-azul transition-transform duration-300 ${
+        className={`size-2.5 rotate-45 border-r-[3px] border-b-[3px] border-azul transition-transform duration-300 ${
           open ? "translate-y-0.5 rotate-225" : "-translate-y-0.5"
         }`}
         aria-hidden
@@ -211,14 +211,14 @@ export function FAQ() {
           })}
         </div>
 
-        <div className="mt-8 space-y-4 md:mt-10">
+        <div className="mt-6 space-y-3 md:mt-8">
           {preguntas.map((faq) => {
             const isOpen = faq.id === openId;
 
             return (
               <div
                 key={`${categoriaActiva}-${faq.id}`}
-                className="faq-item rounded-2xl bg-white px-5 py-4 md:px-7 md:py-5"
+                className="faq-item rounded-2xl bg-white px-5 py-3 md:px-6 md:py-4"
               >
                 <button
                   type="button"
@@ -227,7 +227,7 @@ export function FAQ() {
                   onClick={() => setOpenId(isOpen ? "" : faq.id)}
                   className="flex w-full items-center justify-between gap-4 text-left"
                 >
-                  <span className="font-montserrat text-lg font-bold leading-tight text-azul md:text-2xl">
+                  <span className="font-montserrat text-base font-bold leading-tight text-azul md:text-lg lg:text-xl">
                     {faq.pregunta}
                   </span>
                   <Chevron open={isOpen} />
@@ -239,7 +239,7 @@ export function FAQ() {
                   data-panel-id={faq.id}
                   aria-hidden={!isOpen}
                 >
-                  <p className="pt-4 font-montserrat text-base leading-snug text-ink md:text-lg">
+                  <p className="pt-3 font-montserrat text-sm leading-snug text-ink md:text-base">
                     {faq.respuesta}
                   </p>
                 </div>
