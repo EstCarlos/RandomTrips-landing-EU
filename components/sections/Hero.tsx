@@ -13,7 +13,6 @@ import {
   LandmarkIcon,
   PalmIcon,
   UsersIcon,
-  UtensilsIcon,
 } from "@/components/shared/icons";
 
 const tagsHero = [
@@ -22,7 +21,6 @@ const tagsHero = [
   { label: "Cultura Local", Icon: LandmarkIcon },
   { label: "Playas Paradisíacas", Icon: PalmIcon },
   { label: "Viaje en Grupo", Icon: UsersIcon },
-  { label: "Gastronomía", Icon: UtensilsIcon },
 ];
 
 export function Hero() {
