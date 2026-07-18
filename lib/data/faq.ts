@@ -46,9 +46,8 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     id: "fecha-limite-pago",
     categoria: "reserva-pagos",
     pregunta: "¿Hasta cuándo puedo realizar el pago final?",
-    // TODO: el socio aún no define la fecha límite de pago
     respuesta:
-      "La fecha límite de pago es: [Fecha límite de pago]. (Se indicará la fecha específica en tu reserva.)",
+      "El calendario de pago depende del plan seleccionado. La última fecha programada es el 16 de septiembre y el viaje será del sábado 26 de septiembre al domingo 4 de octubre.",
   },
   {
     id: "cancelacion",
