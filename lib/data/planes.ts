@@ -1,34 +1,43 @@
+export type PagoProgramado = {
+  fecha: string;
+  monto: number;
+};
+
 export type Plan = {
   id: string;
   nombre: string;
   precioPorPersona: number;
-  /** Depósito inicial en EUR — solo en planes con cuotas */
+  /** Deposito inicial en EUR, solo en planes con pagos programados */
   reserva?: number;
-  /** Saldo restante tras la reserva, en EUR — solo en planes con cuotas */
+  /** Saldo restante tras la reserva, en EUR */
   saldo?: number;
-  /** Cuotas mensuales en EUR que cubren el saldo (se cobran por link de pago) */
+  /** Pagos pendientes despues de la reserva */
   cuotas?: {
-    cantidad: number;
-    monto: number;
+    pagos: PagoProgramado[];
   };
   /** Texto del pill amarillo sobre la card, p. ej. "Mejor Precio" */
   badge?: string;
-  /** Card resaltada con fondo azul (Plan 3 — mayor flexibilidad) */
+  /** Card resaltada con fondo azul */
   destacado?: boolean;
-  /** Card más alta que las demás, alineada por abajo (Plan 2) */
+  /** Card mas alta que las demas, alineada por abajo */
   grande?: boolean;
   incluye: string[];
 };
+
+export const FECHA_VIAJE =
+  "Sábado 26 de septiembre – Domingo 4 de octubre";
+
+export const FECHA_RESERVA = "30 julio";
 
 export const planes: Plan[] = [
   {
     id: "plan-1",
     nombre: "Plan 1",
     badge: "Mejor Precio",
-    precioPorPersona: 1032,
+    precioPorPersona: 1124,
     incluye: [
-      "Un solo pago",
-      "Reserva confirmada inmediatamente",
+      "Pago completo al reservar.",
+      "Reserva confirmada inmediatamente.",
       "El mejor precio disponible.",
     ],
   },
@@ -36,31 +45,52 @@ export const planes: Plan[] = [
     id: "plan-2",
     nombre: "Plan 2",
     grande: true,
-    precioPorPersona: 1132,
+    precioPorPersona: 1194,
     reserva: 200,
-    saldo: 932,
-    cuotas: { cantidad: 3, monto: 310.67 },
-    incluye: ["Más flexibilidad para organizar tus pagos."],
+    saldo: 994,
+    cuotas: {
+      pagos: [
+        { fecha: "12 agosto", monto: 332 },
+        { fecha: "26 agosto", monto: 332 },
+        { fecha: "9 septiembre", monto: 330 },
+      ],
+    },
+    incluye: ["Reserva inicial y tres pagos programados."],
   },
   {
     id: "plan-3",
     nombre: "Plan 3",
     badge: "Mayor Flexibilidad",
     destacado: true,
-    precioPorPersona: 1182,
+    precioPorPersona: 1274,
     reserva: 200,
-    saldo: 982,
-    cuotas: { cantidad: 5, monto: 196.4 },
-    incluye: ["La opción ideal si prefieres realizar pagos más pequeños."],
+    saldo: 1074,
+    cuotas: {
+      pagos: [
+        { fecha: "12 agosto", monto: 215 },
+        { fecha: "26 agosto", monto: 215 },
+        { fecha: "2 septiembre", monto: 215 },
+        { fecha: "9 septiembre", monto: 215 },
+        { fecha: "16 septiembre", monto: 214 },
+      ],
+    },
+    incluye: ["Reserva inicial y pagos mas pequeños hasta completar el viaje."],
   },
 ];
 
 export const infoPago: string[] = [
-  "El depósito inicial garantiza tu lugar en la experiencia.",
-  "Puedes adelantar cuotas o completar el pago en cualquier momento antes de la fecha límite.",
-  "Todos los pagos deben estar completados antes de la fecha límite de pago del viaje.",
-  "Los planes con mayor cantidad de cuotas tienen un precio diferente debido a la flexibilidad que ofrecen.",
+  `Fecha de viaje: ${FECHA_VIAJE}.`,
+  `La reserva se realiza el ${FECHA_RESERVA} con el monto indicado en cada plan.`,
+  "Puedes adelantar pagos o completar el saldo en cualquier momento antes de la última fecha programada.",
+  "Los planes con mayor cantidad de pagos tienen un precio diferente debido a la flexibilidad que ofrecen.",
 ];
+
+export function formatearEuro(monto: number): string {
+  return `${monto.toLocaleString("es-ES", {
+    minimumFractionDigits: monto % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  })} €`;
+}
 
 export function getPlanById(id: string): Plan | undefined {
   return planes.find((plan) => plan.id === id);
@@ -68,7 +98,7 @@ export function getPlanById(id: string): Plan | undefined {
 
 /**
  * Lo que se cobra HOY en el checkout, en EUR: el total en planes de pago
- * único, o el depósito de reserva (por persona) en planes con cuotas.
+ * unico, o el deposito de reserva (por persona) en planes con cuotas.
  * Debe coincidir con calcularPagoInicial del backend (random-trips-backend-eu),
  * que es quien crea la orden PayPal con el monto real.
  */
@@ -80,31 +110,23 @@ export type CuotaProgramada = {
   numero: number;
   /** Monto de la cuota en EUR para todos los viajeros */
   monto: number;
-  fecha: Date;
+  /** Monto de la cuota en EUR por persona */
+  montoPorPersona: number;
+  fecha: string;
 };
 
-/**
- * Calendario estimado de cuotas mensuales: la primera un mes después de la
- * reserva y así sucesivamente. Cada cuota se cobra con un link de pago que
- * envía el equipo, por lo que las fechas son orientativas.
- */
 export function calendarioCuotas(
   plan: Plan,
-  cantidadViajeros: number,
-  desde: Date = new Date()
+  cantidadViajeros: number
 ): CuotaProgramada[] {
   if (!plan.cuotas) {
     return [];
   }
 
-  return Array.from({ length: plan.cuotas.cantidad }, (_, i) => {
-    const fecha = new Date(desde);
-    fecha.setMonth(fecha.getMonth() + i + 1);
-
-    return {
-      numero: i + 1,
-      monto: plan.cuotas!.monto * cantidadViajeros,
-      fecha,
-    };
-  });
+  return plan.cuotas.pagos.map((pago, index) => ({
+    numero: index + 1,
+    monto: pago.monto * cantidadViajeros,
+    montoPorPersona: pago.monto,
+    fecha: pago.fecha,
+  }));
 }
