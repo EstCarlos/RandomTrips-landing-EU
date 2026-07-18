@@ -202,7 +202,7 @@ export function Itinerario({
         <p className="itinerary-kicker font-montserrat text-lg text-white md:text-xl">
           Del{" "}
           <strong className="font-bold">
-            Miércoles 2 al Viernes 11 de Septiembre
+            Sábado 26 de septiembre al Domingo 4 de octubre
           </strong>
         </p>
 
