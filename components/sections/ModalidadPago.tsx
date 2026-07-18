@@ -5,7 +5,13 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
-import { planes, infoPago, type Plan } from "@/lib/data/planes";
+import {
+  FECHA_RESERVA,
+  formatearEuro,
+  planes,
+  infoPago,
+  type Plan,
+} from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 function PlanCard({ plan }: { plan: Plan }) {
@@ -28,7 +34,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </h3>
 
       <p className="mt-3 font-montserrat text-2xl font-bold text-azul">
-        EUR${plan.precioPorPersona.toLocaleString("en-US")}
+        {formatearEuro(plan.precioPorPersona)}
         <span className="ml-1 text-sm font-medium text-azul/70">
           / persona
         </span>
@@ -36,15 +42,14 @@ function PlanCard({ plan }: { plan: Plan }) {
 
       {plan.reserva !== undefined && plan.saldo !== undefined && (
         <p className="mt-1 font-montserrat text-sm font-medium text-azul/80">
-          Reserva EUR${plan.reserva.toLocaleString("en-US")} · Saldo EUR$
-          {plan.saldo.toLocaleString("en-US")}
+          Reserva {formatearEuro(plan.reserva)} · Saldo{" "}
+          {formatearEuro(plan.saldo)}
         </p>
       )}
 
       {plan.cuotas && (
         <p className="mt-1 font-montserrat text-sm font-bold text-azul">
-          {plan.cuotas.cantidad} cuotas mensuales de EUR$
-          {plan.cuotas.monto.toFixed(2)}
+          Pagos programados desde el {FECHA_RESERVA}
         </p>
       )}
 
@@ -203,9 +208,8 @@ export function ModalidadPago() {
           </ul>
         </div>
 
-        {/* TODO: el socio aún no define la fecha límite de pago — reemplazar el placeholder */}
         <p className="mt-10 text-center font-montserrat text-base font-bold leading-relaxed text-white md:mt-12 md:text-lg">
-          [Aquí va la fecha límite de pago]
+          Fecha de viaje: Sábado 26 de septiembre – Domingo 4 de octubre
         </p>
       </div>
     </section>
