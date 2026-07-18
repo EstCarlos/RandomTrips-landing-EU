@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { Plan } from "@/lib/data/planes";
+import { calendarioCuotas, formatearEuro, type Plan } from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 export function ReservaConfirmada({
@@ -27,13 +27,15 @@ export function ReservaConfirmada({
       </p>
 
       {plan?.cuotas && (
-        <p className="mt-4 rounded-2xl bg-crema p-4 font-montserrat text-sm leading-relaxed text-ink">
-          Tu cupo quedó asegurado con la reserva. El saldo se paga en{" "}
+        <p className="mt-4 rounded-2xl bg-black/5 p-4 font-montserrat text-sm leading-relaxed text-ink">
+          Tu cupo quedó asegurado con la reserva. El saldo se completa en las
+          fechas programadas:{" "}
           <strong className="font-bold">
-            {plan.cuotas.cantidad} cuotas mensuales de EUR$
-            {plan.cuotas.monto.toFixed(2)} por persona
+            {calendarioCuotas(plan, 1)
+              .map((cuota) => `${cuota.fecha}: ${formatearEuro(cuota.monto)}`)
+              .join(", ")}
           </strong>
-          : recibirás un link de pago por email para cada cuota.
+          . Recibirás un link de pago por email para cada fecha.
         </p>
       )}
 
