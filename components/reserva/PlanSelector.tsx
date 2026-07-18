@@ -1,6 +1,6 @@
 "use client";
 
-import { planes } from "@/lib/data/planes";
+import { FECHA_RESERVA, formatearEuro, planes } from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 export function PlanSelector({
@@ -35,7 +35,7 @@ export function PlanSelector({
 
             <h3 className="font-blur text-3xl leading-none">{plan.nombre}</h3>
             <p className="mt-2 font-montserrat text-2xl font-bold">
-              EUR${plan.precioPorPersona.toLocaleString("en-US")}
+              {formatearEuro(plan.precioPorPersona)}
               <span className="ml-1 text-sm font-medium opacity-80">
                 / persona
               </span>
@@ -43,15 +43,14 @@ export function PlanSelector({
 
             {plan.reserva !== undefined && plan.saldo !== undefined && (
               <p className="mt-1 font-montserrat text-xs font-medium opacity-80">
-                Reserva EUR${plan.reserva.toLocaleString("en-US")} · Saldo EUR$
-                {plan.saldo.toLocaleString("en-US")}
+                Reserva {formatearEuro(plan.reserva)} · Saldo{" "}
+                {formatearEuro(plan.saldo)}
               </p>
             )}
 
             {plan.cuotas && (
               <p className="mt-1 font-montserrat text-xs font-bold">
-                {plan.cuotas.cantidad} cuotas mensuales de EUR$
-                {plan.cuotas.monto.toFixed(2)}
+                Pagos programados desde el {FECHA_RESERVA}
               </p>
             )}
 
