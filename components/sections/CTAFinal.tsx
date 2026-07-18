@@ -6,7 +6,8 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
 
-const WHATSAPP_URL = "https://wa.link/ayrgeu";
+const WHATSAPP_URL =
+  "https://chat.whatsapp.com/G5tzTAXKJTD67QOkZ5mYKK?s=cl&p=a&ilr=0&amv=0";
 
 export function CTAFinal() {
   const container = useRef<HTMLElement>(null);
