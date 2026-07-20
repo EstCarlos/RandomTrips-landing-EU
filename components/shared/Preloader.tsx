@@ -8,16 +8,20 @@ import { PreloaderLogo } from "@/components/shared/PreloaderLogo";
 /**
  * Overlay de carga inicial: las letras de RANDOM entran con pop (back.out),
  * TRIPS con fade+slide, y la cortina crema sube revelando la página.
- * Solo aparece en cargas completas (hard load) — las navegaciones SPA no
- * remontan el componente.
+ * Aparece en cargas y recargas de inicio; se omite al volver desde reserva.
  */
-export function Preloader() {
+export function Preloader({ omitir = false }: { omitir?: boolean }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const overlay = container.current;
       if (!overlay) return;
+
+      if (omitir) {
+        window.history.replaceState(window.history.state, "", "/");
+        return;
+      }
 
       // bloquear el scroll mientras la cortina está visible
       document.documentElement.classList.add("overflow-hidden");
@@ -100,13 +104,14 @@ export function Preloader() {
         desbloquear();
       };
     },
-    { scope: container }
+    { scope: container, dependencies: [omitir], revertOnUpdate: true }
   );
 
   return (
     <div
       ref={container}
       className="preloader fixed inset-0 z-100 flex items-center justify-center bg-crema"
+      style={{ display: omitir ? "none" : "flex" }}
       aria-hidden
     >
       {/* sin JS la cortina nunca se animaría: ocultarla para no tapar la página */}

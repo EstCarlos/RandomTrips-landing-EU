@@ -2,12 +2,7 @@
 
 export function VolverButton({ className = "" }: { className?: string }) {
   function volver() {
-    if (window.history.length > 1) {
-      window.history.back();
-      return;
-    }
-
-    window.location.href = "/";
+    window.location.href = "/?omitirIntro=1";
   }
 
   return (

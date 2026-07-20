@@ -14,12 +14,17 @@ import { Sponsors } from "../components/sections/Sponsors";
 import { Preloader } from "../components/shared/Preloader";
 import { getGalerias } from "../lib/galeria";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ omitirIntro?: string }>;
+}) {
+  const omitirIntro = (await searchParams).omitirIntro === "1";
   const galerias = await getGalerias();
 
   return (
     <main className="flex-1">
-      <Preloader />
+      <Preloader omitir={omitirIntro} />
       <Hero />
       <LoQueViviremos />
       <Itinerario galerias={galerias} />
