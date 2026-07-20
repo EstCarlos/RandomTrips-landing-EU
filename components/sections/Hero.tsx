@@ -13,7 +13,6 @@ import {
   LandmarkIcon,
   PalmIcon,
   UsersIcon,
-  UtensilsIcon,
 } from "@/components/shared/icons";
 
 const tagsHero = [
@@ -22,7 +21,6 @@ const tagsHero = [
   { label: "Cultura Local", Icon: LandmarkIcon },
   { label: "Playas Paradisíacas", Icon: PalmIcon },
   { label: "Viaje en Grupo", Icon: UsersIcon },
-  { label: "Gastronomía", Icon: UtensilsIcon },
 ];
 
 export function Hero() {
@@ -83,7 +81,7 @@ export function Hero() {
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6 py-8 md:px-10 md:py-10 lg:px-12">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-8 md:px-6 md:py-10">
           <header className="flex items-center justify-between">
             <Image
               src="/logos/random-trips-logo.svg"

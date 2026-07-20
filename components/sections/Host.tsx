@@ -85,7 +85,7 @@ export function Host() {
       ref={container}
       className="bg-rojo-principal py-16 md:py-20 lg:py-24"
     >
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <h2 className="host-heading font-blur text-5xl leading-none text-white md:text-6xl lg:text-7xl">
           CONOCE LOS HOSTS
         </h2>

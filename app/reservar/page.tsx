@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ReservaFlow } from "@/components/reserva/ReservaFlow";
+import { VolverButton } from "@/components/reserva/VolverButton";
 
 export const metadata: Metadata = {
   title: "Reserva tu cupo — Random Trips República Dominicana",
@@ -30,7 +32,9 @@ export default function ReservarPage() {
       </header>
 
       <div className="mx-auto w-full max-w-6xl px-4 py-10 md:px-6 md:py-14">
-        <p className="font-montserrat text-sm font-bold uppercase tracking-wider text-azul/60">
+        <VolverButton />
+
+        <p className="mt-8 font-montserrat text-sm font-bold uppercase tracking-wider text-azul/60">
           Asegura tu cupo
         </p>
         <h1 className="mt-2 font-blur text-4xl leading-none text-azul md:text-5xl">
@@ -38,7 +42,9 @@ export default function ReservarPage() {
         </h1>
 
         <div className="mt-8">
-          <ReservaFlow />
+          <Suspense fallback={null}>
+            <ReservaFlow />
+          </Suspense>
         </div>
       </div>
     </main>

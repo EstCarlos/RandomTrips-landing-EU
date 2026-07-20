@@ -12,11 +12,13 @@ function DestinoEnMapa({ destino }: { destino: DestinoMapa }) {
     <>
       {/* anclaje en div interno: GSAP anima el wrapper y pisaría su translate */}
       <div
-        className="map-destination-photo absolute z-20 w-28 md:w-32 lg:w-40"
+        className={`map-destination-photo absolute z-20 ${destino.fotoAncho}`}
         style={{ top: destino.fotoPos.top, left: destino.fotoPos.left }}
       >
         <div className="-translate-x-1/2 -translate-y-1/2">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-white shadow-lg">
+          <div
+            className={`relative overflow-hidden rounded-xl border-2 border-white shadow-lg ${destino.fotoAspecto}`}
+          >
             <Image
               src={destino.imagen}
               alt={`Vista de ${destino.nombre}`}
@@ -158,7 +160,7 @@ export function MapaDestinos() {
   return (
     <section
       ref={container}
-      className="relative w-full overflow-hidden py-12 md:py-16"
+      className="relative w-full overflow-hidden py-8 md:py-10"
     >
       <Image
         src={mediaUrl("landing/fondo-atras-mapa.png")}
@@ -175,7 +177,7 @@ export function MapaDestinos() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
-        <div className="mapa-intro mb-10 md:mb-12">
+        <div className="mapa-intro mb-5 md:mb-7">
           <p className="font-montserrat text-2xl font-bold text-white md:text-3xl">
             Ruta:{" "}
             <span className="font-blur text-3xl text-amarillo md:text-4xl">
@@ -183,7 +185,7 @@ export function MapaDestinos() {
             </span>
           </p>
 
-          <p className="mt-4 max-w-4xl font-montserrat text-lg text-white/90 md:text-xl">
+          <p className="mt-3 w-full font-montserrat text-base leading-snug text-white/90 md:text-lg">
             Una travesía que recorre lo mejor de{" "}
             <strong className="font-bold">República Dominicana</strong>,
             desde playas{" "}
@@ -205,8 +207,8 @@ export function MapaDestinos() {
         </div>
 
         <div className="hidden md:block">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-white/50 px-5 py-7 shadow-2xl lg:px-8 lg:py-9">
-            <div className="relative mx-auto aspect-[3863/2653] w-full">
+          <div className="relative">
+            <div className="relative mx-auto aspect-[3863/2653] w-full max-w-4xl lg:max-w-5xl">
               <Image
                 src={mediaUrl("landing/MapaRD.png")}
                 alt="Mapa ilustrativo de República Dominicana con destinos marcados"

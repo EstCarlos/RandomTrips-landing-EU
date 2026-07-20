@@ -124,17 +124,19 @@ export function GaleriaLightbox({
         </button>
       )}
 
-      <figure className="lightbox-imagen w-full max-w-4xl">
-        <div className="relative h-[60vh] w-full overflow-hidden rounded-3xl md:h-[70vh]">
-          <Image
-            src={fotos[index]}
-            alt={`${titulo} — foto ${index + 1} de ${fotos.length}`}
-            fill
-            sizes="(max-width: 896px) 92vw, 896px"
-            className="object-cover"
-          />
-        </div>
-        <figcaption className="mt-4 flex items-center justify-between text-white">
+      <figure className="lightbox-imagen flex w-full max-w-4xl flex-col items-center">
+        {/* width/height solo reservan el ratio inicial: h-auto/w-auto dejan que
+            cada foto conserve su proporción original (vertical u horizontal) */}
+        <Image
+          key={fotos[index]}
+          src={fotos[index]}
+          alt={`${titulo} — foto ${index + 1} de ${fotos.length}`}
+          width={1600}
+          height={1200}
+          sizes="(max-width: 896px) 92vw, 896px"
+          className="h-auto max-h-[60vh] w-auto max-w-full rounded-3xl object-contain md:max-h-[70vh]"
+        />
+        <figcaption className="mt-4 flex w-full items-center justify-between text-white">
           <span className="font-montserrat text-base font-bold md:text-lg">
             {titulo}
           </span>

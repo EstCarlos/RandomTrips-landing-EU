@@ -5,7 +5,13 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
-import { planes, infoPago, type Plan } from "@/lib/data/planes";
+import {
+  FECHA_RESERVA,
+  formatearEuro,
+  planes,
+  infoPago,
+  type Plan,
+} from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 function PlanCard({ plan }: { plan: Plan }) {
@@ -13,74 +19,45 @@ function PlanCard({ plan }: { plan: Plan }) {
 
   return (
     <article
-      className={`plan-card relative flex flex-col rounded-3xl p-6 shadow-[0_24px_48px_-16px_rgba(15,60,140,0.35)] will-change-transform md:p-7 ${
+      className={`plan-card relative flex flex-col rounded-3xl bg-white p-6 shadow-[0_24px_48px_-16px_rgba(15,60,140,0.35)] will-change-transform md:p-7 ${
         plan.grande ? "md:pt-14 md:pb-10" : ""
-      } ${resaltado ? "bg-azul" : "bg-white"}`}
+      } ${resaltado ? "ring-2 ring-azul" : ""}`}
     >
       {plan.badge && (
-        <span className="absolute -top-4 left-6 -rotate-2 rounded-full bg-amarillo px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider text-azul shadow-sm">
+        <span className="absolute -top-4 left-6 rounded-full bg-amarillo px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider text-azul shadow-sm">
           {plan.badge}
         </span>
       )}
 
-      <h3
-        className={`font-blur text-4xl leading-none md:text-5xl ${
-          resaltado ? "text-white" : "text-azul"
-        }`}
-      >
+      <h3 className="font-blur text-4xl leading-none text-azul md:text-5xl">
         {plan.nombre.toUpperCase()}
       </h3>
 
-      <p
-        className={`mt-3 font-montserrat text-2xl font-bold ${
-          resaltado ? "text-white" : "text-azul"
-        }`}
-      >
-        EUR${plan.precioPorPersona.toLocaleString("en-US")}
-        <span
-          className={`ml-1 text-sm font-medium ${
-            resaltado ? "text-white/80" : "text-azul/70"
-          }`}
-        >
+      <p className="mt-3 font-montserrat text-2xl font-bold text-azul">
+        {formatearEuro(plan.precioPorPersona)}
+        <span className="ml-1 text-sm font-medium text-azul/70">
           / persona
         </span>
       </p>
 
       {plan.reserva !== undefined && plan.saldo !== undefined && (
-        <p
-          className={`mt-1 font-montserrat text-sm font-medium ${
-            resaltado ? "text-white/90" : "text-azul/80"
-          }`}
-        >
-          Reserva EUR${plan.reserva.toLocaleString("en-US")} · Saldo EUR$
-          {plan.saldo.toLocaleString("en-US")}
+        <p className="mt-1 font-montserrat text-sm font-medium text-azul/80">
+          Reserva {formatearEuro(plan.reserva)} · Saldo{" "}
+          {formatearEuro(plan.saldo)}
         </p>
       )}
 
       {plan.cuotas && (
-        <p
-          className={`mt-1 font-montserrat text-sm font-bold ${
-            resaltado ? "text-white" : "text-azul"
-          }`}
-        >
-          {plan.cuotas.cantidad} cuotas mensuales de EUR$
-          {plan.cuotas.monto.toFixed(2)}
+        <p className="mt-1 font-montserrat text-sm font-bold text-azul">
+          Pagos programados desde el {FECHA_RESERVA}
         </p>
       )}
 
       <ul className="mt-5 flex-1 space-y-2.5">
         {plan.incluye.map((item) => (
           <li key={item} className="flex items-start gap-2.5">
-            <CheckIcon
-              className={`mt-1 size-3.5 shrink-0 ${
-                resaltado ? "text-white" : "text-azul"
-              }`}
-            />
-            <span
-              className={`font-montserrat text-sm leading-snug md:text-base ${
-                resaltado ? "text-white" : "text-azul"
-              }`}
-            >
+            <CheckIcon className="mt-1 size-3.5 shrink-0 text-azul" />
+            <span className="font-montserrat text-sm leading-snug text-azul md:text-base">
               {item}
             </span>
           </li>
@@ -88,10 +65,8 @@ function PlanCard({ plan }: { plan: Plan }) {
       </ul>
 
       <a
-        href="/reservar"
-        className={`mt-6 inline-block rounded-full px-8 py-2.5 text-center font-blur text-xl uppercase tracking-wide shadow-md transition-transform duration-300 hover:scale-105 ${
-          resaltado ? "bg-white text-azul" : "bg-amarillo text-azul"
-        }`}
+        href={`/reservar?plan=${plan.id}`}
+        className="mt-6 inline-block rounded-full bg-amarillo px-8 py-2.5 text-center font-blur text-xl uppercase tracking-wide text-azul shadow-md transition-transform duration-300 hover:scale-105"
       >
         Elegir este plan
       </a>
@@ -198,7 +173,7 @@ export function ModalidadPago() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="pago-heading">
           <h2 className="font-blur text-5xl leading-none text-white md:text-6xl lg:text-7xl">
             MODALIDAD DE PAGO
@@ -208,7 +183,7 @@ export function ModalidadPago() {
           </p>
         </div>
 
-        <div className="pago-grid mt-12 grid items-end gap-6 md:mt-24 md:grid-cols-3 md:gap-7">
+        <div className="pago-grid mt-8 grid items-end gap-6 md:mt-10 md:grid-cols-3 md:gap-7">
           {planes.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
@@ -233,17 +208,8 @@ export function ModalidadPago() {
           </ul>
         </div>
 
-        <p className="mt-10 text-justify font-montserrat text-base leading-relaxed text-white/90 md:mt-12 md:text-lg">
-          Una travesía que recorre lo mejor de{" "}
-          <strong className="font-bold">República Dominicana</strong>, desde
-          playas <strong className="font-bold">paradisíacas, charcos y saltos</strong>,
-          hasta encantadores pueblos costeros y vibrantes ciudades. De{" "}
-          <strong className="font-bold">norte</strong> a{" "}
-          <strong className="font-bold">sur</strong> y de{" "}
-          <strong className="font-bold">este</strong> a{" "}
-          <strong className="font-bold">oeste</strong>, vivirás aventuras únicas
-          conectando cada destino con cultura, naturaleza y la esencia auténtica
-          del Caribe.
+        <p className="mt-10 text-center font-montserrat text-base font-bold leading-relaxed text-white md:mt-12 md:text-lg">
+          Fecha de viaje: Sábado 26 de septiembre – Domingo 4 de octubre
         </p>
       </div>
     </section>

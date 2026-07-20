@@ -113,7 +113,7 @@ export function ParaTi() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <BloqueParaTi
           titulo="ESTA EXPERIENCIA ES PARA TI SI:"
           items={esParaTiSi}

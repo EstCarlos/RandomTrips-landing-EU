@@ -78,7 +78,7 @@ export function HeroAtardecer() {
         className="atardecer-img scale-110 object-cover will-change-transform"
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-16 pb-64 md:px-6 md:pt-24 md:pb-80 lg:pb-96">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-16 pb-64 md:px-6 md:pt-24 md:pb-80 lg:pb-96">
         <p className="atardecer-fade font-montserrat text-xl font-bold text-white md:text-2xl">
           Descubre la
         </p>

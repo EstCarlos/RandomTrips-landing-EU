@@ -1,13 +1,16 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import {
+  FECHA_RESERVA,
+  FECHA_VIAJE,
   planes,
   calcularPagoInicial,
   calendarioCuotas,
+  formatearEuro,
   type Plan,
 } from "@/lib/data/planes";
 import { PlanSelector } from "@/components/reserva/PlanSelector";
@@ -19,24 +22,9 @@ type Paso = "formulario" | "pago" | "exito";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function formatearEUR(monto: number): string {
-  return `EUR$${monto.toLocaleString("en-US", {
-    minimumFractionDigits: monto % 1 === 0 ? 0 : 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
-function formatearFecha(fecha: Date): string {
-  return fecha.toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 /**
  * Desglose de lo que se paga hoy y el calendario de cuotas del saldo.
- * En planes de pago único solo muestra el total.
+ * En planes de pago unico solo muestra el total.
  */
 function ResumenPago({
   plan,
@@ -51,16 +39,20 @@ function ResumenPago({
   const conCuotas = cuotas.length > 0;
 
   return (
-    <div className="rounded-2xl bg-crema px-5 py-4">
+    <div className="rounded-2xl bg-black/5 px-5 py-4">
       <div className="flex items-center justify-between">
         <span className="font-montserrat text-sm font-bold text-azul">
           {conCuotas ? "Pagas hoy (reserva)" : "Total"} ({cantidadViajeros}{" "}
           viajero{cantidadViajeros > 1 ? "s" : ""})
         </span>
         <span className="font-blur text-2xl text-azul">
-          {formatearEUR(pagoHoy)}
+          {formatearEuro(pagoHoy)}
         </span>
       </div>
+
+      <p className="mt-2 font-montserrat text-xs font-medium text-ink/70">
+        Fecha de viaje: {FECHA_VIAJE}
+      </p>
 
       {conCuotas && (
         <>
@@ -69,37 +61,30 @@ function ResumenPago({
           <p className="font-montserrat text-sm text-ink">
             Saldo restante:{" "}
             <strong className="font-bold">
-              {formatearEUR(total - pagoHoy)}
+              {formatearEuro(total - pagoHoy)}
             </strong>{" "}
-            en {plan.cuotas!.cantidad} cuotas mensuales
-            {cantidadViajeros > 1 && (
-              <span className="text-ink/70">
-                {" "}
-                (EUR${plan.cuotas!.monto.toFixed(2)} × {cantidadViajeros}{" "}
-                viajeros por cuota)
-              </span>
-            )}
-            :
+            con pagos programados:
           </p>
 
           <ul className="mt-2 space-y-1">
+            <li className="flex items-center justify-between font-montserrat text-sm text-ink">
+              <span>{FECHA_RESERVA} (Reserva)</span>
+              <span className="font-bold">{formatearEuro(pagoHoy)}</span>
+            </li>
             {cuotas.map((cuota) => (
               <li
                 key={cuota.numero}
                 className="flex items-center justify-between font-montserrat text-sm text-ink"
               >
-                <span>
-                  Cuota {cuota.numero} — {formatearFecha(cuota.fecha)}
-                </span>
-                <span className="font-bold">{formatearEUR(cuota.monto)}</span>
+                <span>{cuota.fecha}</span>
+                <span className="font-bold">{formatearEuro(cuota.monto)}</span>
               </li>
             ))}
           </ul>
 
           <p className="mt-3 font-montserrat text-xs leading-snug text-ink/60">
-            Fechas estimadas a partir de hoy. Recibirás un link de pago por
-            email para cada cuota; puedes adelantar cuotas o completar el pago
-            en cualquier momento antes de la fecha límite.
+            Recibirás un link de pago por email para cada fecha programada. Los
+            montos mostrados se calculan según la cantidad de viajeros.
           </p>
 
           <div className="mt-3 flex items-center justify-between border-t border-azul/10 pt-3">
@@ -107,7 +92,7 @@ function ResumenPago({
               Total del viaje
             </span>
             <span className="font-montserrat text-base font-bold text-azul">
-              {formatearEUR(total)}
+              {formatearEuro(total)}
             </span>
           </div>
         </>
@@ -118,8 +103,14 @@ function ResumenPago({
 
 export function ReservaFlow() {
   const container = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const planIdDesdeUrl = searchParams.get("plan");
   const [paso, setPaso] = useState<Paso>("formulario");
-  const [planId, setPlanId] = useState(planes[0]?.id ?? "");
+  const [planId, setPlanId] = useState(
+    (planIdDesdeUrl && planes.some((p) => p.id === planIdDesdeUrl)
+      ? planIdDesdeUrl
+      : planes[0]?.id) ?? ""
+  );
   const [viajeros, setViajeros] = useState<string[]>([""]);
   const [nombreCompleto, setNombreCompleto] = useState("");
   const [email, setEmail] = useState("");
@@ -127,6 +118,7 @@ export function ReservaFlow() {
   const [errores, setErrores] = useState<Record<string, string>>({});
   const [erroresViajeros, setErroresViajeros] = useState<Record<number, string>>({});
   const [reservaId, setReservaId] = useState("");
+  const [pagoEnProceso, setPagoEnProceso] = useState(false);
 
   const plan = planes.find((p) => p.id === planId);
 
@@ -192,7 +184,7 @@ export function ReservaFlow() {
           className="reserva-paso mx-auto max-w-4xl rounded-3xl bg-white p-6 shadow-2xl md:p-10"
         >
           <h2 className="font-blur text-3xl leading-none text-azul md:text-4xl">
-            Elige tu plan
+            Modalidad de pago
           </h2>
           {errores.plan && (
             <p className="mt-1 font-montserrat text-sm text-rojo-principal">
@@ -297,47 +289,72 @@ export function ReservaFlow() {
 
       {paso === "pago" && plan && (
         <div className="reserva-paso mx-auto max-w-xl rounded-3xl bg-white p-6 shadow-2xl md:p-10">
-          <h2 className="font-blur text-3xl leading-none text-azul md:text-4xl">
-            Confirmar y pagar
-          </h2>
+          {/* Pantalla de espera mientras el backend captura el pago (2-3s):
+              sin ella, el cliente vuelve a ver "Confirmar y pagar" un instante
+              y puede pensar que el pago no se efectuó. */}
+          {pagoEnProceso && (
+            <div className="flex flex-col items-center py-14 text-center">
+              <div
+                className="h-12 w-12 animate-spin rounded-full border-4 border-azul border-t-transparent"
+                aria-hidden
+              />
+              <h2 className="mt-6 font-blur text-3xl leading-none text-azul md:text-4xl">
+                Procesando tu pago
+              </h2>
+              <p className="mt-3 max-w-sm font-montserrat text-sm leading-relaxed text-ink/70">
+                Estamos confirmando tu pago y registrando tu reserva. No
+                cierres ni recargues esta página.
+              </p>
+            </div>
+          )}
 
-          <div className="mt-5 space-y-2 rounded-2xl bg-crema p-5">
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Plan:</strong> {plan.nombre}
-            </p>
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Viajeros:</strong>{" "}
-              {viajeros.join(", ")}
-            </p>
-            <p className="font-montserrat text-sm text-ink">
-              <strong className="font-bold">Titular:</strong> {nombreCompleto} —{" "}
-              {email}
-            </p>
+          {/* El contenido queda montado (oculto) para no desmontar los botones
+              de PayPal a mitad de la captura. */}
+          <div className={pagoEnProceso ? "hidden" : ""}>
+            <button
+              type="button"
+              onClick={() => setPaso("formulario")}
+              className="mb-6 inline-flex items-center rounded-full bg-black/5 px-4 py-2 font-montserrat text-sm font-bold text-azul transition-colors hover:bg-black/10"
+            >
+              Volver
+            </button>
+
+            <h2 className="font-blur text-3xl leading-none text-azul md:text-4xl">
+              Confirmar y pagar
+            </h2>
+
+            <div className="mt-5 space-y-2 rounded-2xl bg-black/5 p-5">
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Plan:</strong> {plan.nombre}
+              </p>
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Viajeros:</strong>{" "}
+                {viajeros.join(", ")}
+              </p>
+              <p className="font-montserrat text-sm text-ink">
+                <strong className="font-bold">Titular:</strong> {nombreCompleto} —{" "}
+                {email}
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
+            </div>
+
+            <div className="mt-6">
+              <PagoPaypal
+                planId={planId}
+                viajeros={viajeros}
+                contacto={{ nombreCompleto, email, telefono }}
+                onProcesandoChange={setPagoEnProceso}
+                onSuccess={(id) => {
+                  setReservaId(id);
+                  setPaso("exito");
+                }}
+              />
+            </div>
+
           </div>
-
-          <div className="mt-4">
-            <ResumenPago plan={plan} cantidadViajeros={viajeros.length} />
-          </div>
-
-          <div className="mt-6">
-            <PagoPaypal
-              planId={planId}
-              viajeros={viajeros}
-              contacto={{ nombreCompleto, email, telefono }}
-              onSuccess={(id) => {
-                setReservaId(id);
-                setPaso("exito");
-              }}
-            />
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setPaso("formulario")}
-            className="mt-4 w-full font-montserrat text-sm font-medium text-azul underline"
-          >
-            Volver a editar mis datos
-          </button>
         </div>
       )}
 
@@ -345,16 +362,6 @@ export function ReservaFlow() {
         <ReservaConfirmada reservaId={reservaId} plan={plan} />
       )}
 
-      {paso !== "exito" && (
-        <p className="mt-6 text-center">
-          <Link
-            href="/"
-            className="font-montserrat text-sm font-medium text-azul underline"
-          >
-            Volver al inicio
-          </Link>
-        </p>
-      )}
     </div>
   );
 }

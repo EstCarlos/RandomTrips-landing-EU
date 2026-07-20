@@ -18,11 +18,18 @@ export function PagoPaypal({
   viajeros,
   contacto,
   onSuccess,
+  onProcesandoChange,
 }: {
   planId: string;
   viajeros: string[];
   contacto: ContactoReserva;
   onSuccess: (reservaId: string) => void;
+  /**
+   * Se dispara con true en cuanto PayPal aprueba el pago y empieza la captura
+   * en el backend (2-3s): el padre muestra "Procesando tu pago…" para que el
+   * cliente no vea la pantalla de pago congelada y crea que falló.
+   */
+  onProcesandoChange?: (procesando: boolean) => void;
 }) {
   const [error, setError] = useState("");
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
@@ -59,36 +66,48 @@ export function PagoPaypal({
             return data.id as string;
           }}
           onApprove={async (data, actions) => {
-            const response = await fetch(apiUrl("/paypal/capture-order"), {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                orderId: data.orderID,
-                planId,
-                viajeros,
-                contacto,
-              }),
-            });
+            setError("");
+            onProcesandoChange?.(true);
 
-            if (!response.ok) {
-              const body = await response.json().catch(() => ({}));
+            try {
+              const response = await fetch(apiUrl("/paypal/capture-order"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  orderId: data.orderID,
+                  planId,
+                  viajeros,
+                  contacto,
+                }),
+              });
 
-              // Tarjeta rechazada por el banco: reiniciar el checkout para
-              // que el cliente reintente con otro método sin perder el flujo.
-              if (body.code === "INSTRUMENT_DECLINED") {
-                setError(
-                  body.error ??
-                    "La tarjeta fue rechazada. Intenta con otra tarjeta u otro método de pago."
-                );
-                return actions.restart();
+              if (!response.ok) {
+                const body = await response.json().catch(() => ({}));
+                onProcesandoChange?.(false);
+
+                // Tarjeta rechazada por el banco: reiniciar el checkout para
+                // que el cliente reintente con otro método sin perder el flujo.
+                if (body.code === "INSTRUMENT_DECLINED") {
+                  setError(
+                    body.error ??
+                      "La tarjeta fue rechazada. Intenta con otra tarjeta u otro método de pago."
+                  );
+                  return actions.restart();
+                }
+
+                setError(body.error ?? "No se pudo confirmar el pago");
+                return;
               }
 
-              setError(body.error ?? "No se pudo confirmar el pago");
-              return;
+              const body = await response.json();
+              onSuccess(body.reservaId as string);
+            } catch (err) {
+              console.error(err);
+              onProcesandoChange?.(false);
+              setError(
+                "No se pudo confirmar el pago. Revisa tu conexión e intenta de nuevo."
+              );
             }
-
-            const body = await response.json();
-            onSuccess(body.reservaId as string);
           }}
           onError={(err) => {
             console.error(err);

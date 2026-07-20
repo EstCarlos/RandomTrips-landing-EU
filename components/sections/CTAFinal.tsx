@@ -6,9 +6,8 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
 
-// TODO: número real de WhatsApp
 const WHATSAPP_URL =
-  "https://wa.me/1809XXXXXXX?text=Hola%2C%20quiero%20info%20del%20viaje%20a%20RD";
+  "https://chat.whatsapp.com/G5tzTAXKJTD67QOkZ5mYKK?s=cl&p=a&ilr=0&amv=0";
 
 export function CTAFinal() {
   const container = useRef<HTMLElement>(null);
@@ -80,7 +79,7 @@ export function CTAFinal() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto -mt-60 w-full max-w-6xl px-4 pb-24 md:-mt-72 md:px-6 md:pb-28 lg:-mt-90 lg:pb-32">
+      <div className="relative z-10 mx-auto -mt-60 w-full max-w-7xl px-4 pb-24 md:-mt-72 md:px-6 md:pb-28 lg:-mt-90 lg:pb-32">
         <div className="cta-final-card rounded-[3rem] bg-white px-6 py-10 text-center shadow-2xl md:px-14 md:py-14">
           <h2 className="font-blur text-4xl leading-none text-azul md:text-5xl lg:text-6xl">
             ¿TE UNES A LA EXPERIENCIA?

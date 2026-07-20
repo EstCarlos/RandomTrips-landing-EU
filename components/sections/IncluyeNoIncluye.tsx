@@ -26,7 +26,7 @@ function TarjetaLista({
       }`}
     >
       <p
-        className={`inline-flex -rotate-2 rounded-full px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider ${
+        className={`inline-flex rounded-full px-3.5 py-1.5 font-montserrat text-xs font-bold uppercase tracking-wider ${
           isIncluded ? "bg-amarillo text-azul" : "bg-white text-rojo-principal"
         }`}
       >
@@ -137,7 +137,7 @@ export function IncluyeNoIncluye() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="include-heading max-w-3xl">
           <p className="font-montserrat text-lg text-white/85 md:text-xl">
             Todo listo para moverte ligero
