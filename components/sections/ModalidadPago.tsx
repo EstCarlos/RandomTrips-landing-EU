@@ -7,7 +7,7 @@ import { gsap } from "@/lib/gsap";
 import { mediaUrl } from "@/lib/media";
 import {
   FECHA_RESERVA,
-  formatearEuro,
+  formatearPrecio,
   planes,
   infoPago,
   type Plan,
@@ -34,7 +34,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </h3>
 
       <p className="mt-3 font-montserrat text-2xl font-bold text-azul">
-        {formatearEuro(plan.precioPorPersona)}
+        {formatearPrecio(plan.precioPorPersona)}
         <span className="ml-1 text-sm font-medium text-azul/70">
           / persona
         </span>
@@ -42,8 +42,8 @@ function PlanCard({ plan }: { plan: Plan }) {
 
       {plan.reserva !== undefined && plan.saldo !== undefined && (
         <p className="mt-1 font-montserrat text-sm font-medium text-azul/80">
-          Reserva {formatearEuro(plan.reserva)} · Saldo{" "}
-          {formatearEuro(plan.saldo)}
+          Reserva {formatearPrecio(plan.reserva)} · Saldo{" "}
+          {formatearPrecio(plan.saldo)}
         </p>
       )}
 

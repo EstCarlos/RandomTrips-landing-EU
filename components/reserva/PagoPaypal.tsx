@@ -45,7 +45,7 @@ export function PagoPaypal({
   return (
     <div>
       <PayPalScriptProvider
-        options={{ clientId, currency: "EUR", intent: "capture" }}
+        options={{ clientId, currency: "USD", intent: "capture" }}
       >
         <PayPalButtons
           style={{ layout: "vertical", label: "pay" }}

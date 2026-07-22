@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 
-const PDF_URL = "/asset-pdf/Itinerario%20Bernat%20x%20Random%20Trips%20copy.pdf";
+const PDF_URL = "/asset-pdf/Viaje%20a%20RD%20-%20Random%20Trips%20x%20Bernat%20Moreno.pdf";
 
 export function BandaPDF() {
   const container = useRef<HTMLElement>(null);

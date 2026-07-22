@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { calendarioCuotas, formatearEuro, type Plan } from "@/lib/data/planes";
+import { calendarioCuotas, formatearPrecio, type Plan } from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 export function ReservaConfirmada({
@@ -32,7 +32,7 @@ export function ReservaConfirmada({
           fechas programadas:{" "}
           <strong className="font-bold">
             {calendarioCuotas(plan, 1)
-              .map((cuota) => `${cuota.fecha}: ${formatearEuro(cuota.monto)}`)
+              .map((cuota) => `${cuota.fecha}: ${formatearPrecio(cuota.monto)}`)
               .join(", ")}
           </strong>
           . Recibirás un link de pago por email para cada fecha.

@@ -1,6 +1,6 @@
 "use client";
 
-import { FECHA_RESERVA, formatearEuro, planes } from "@/lib/data/planes";
+import { FECHA_RESERVA, formatearPrecio, planes } from "@/lib/data/planes";
 import { CheckIcon } from "@/components/shared/icons";
 
 export function PlanSelector({
@@ -35,7 +35,7 @@ export function PlanSelector({
 
             <h3 className="font-blur text-3xl leading-none">{plan.nombre}</h3>
             <p className="mt-2 font-montserrat text-2xl font-bold">
-              {formatearEuro(plan.precioPorPersona)}
+              {formatearPrecio(plan.precioPorPersona)}
               <span className="ml-1 text-sm font-medium opacity-80">
                 / persona
               </span>
@@ -43,8 +43,8 @@ export function PlanSelector({
 
             {plan.reserva !== undefined && plan.saldo !== undefined && (
               <p className="mt-1 font-montserrat text-xs font-medium opacity-80">
-                Reserva {formatearEuro(plan.reserva)} · Saldo{" "}
-                {formatearEuro(plan.saldo)}
+                Reserva {formatearPrecio(plan.reserva)} · Saldo{" "}
+                {formatearPrecio(plan.saldo)}
               </p>
             )}
 

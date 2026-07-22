@@ -10,7 +10,7 @@ import {
   planes,
   calcularPagoInicial,
   calendarioCuotas,
-  formatearEuro,
+  formatearPrecio,
   type Plan,
 } from "@/lib/data/planes";
 import { PlanSelector } from "@/components/reserva/PlanSelector";
@@ -46,7 +46,7 @@ function ResumenPago({
           viajero{cantidadViajeros > 1 ? "s" : ""})
         </span>
         <span className="font-blur text-2xl text-azul">
-          {formatearEuro(pagoHoy)}
+          {formatearPrecio(pagoHoy)}
         </span>
       </div>
 
@@ -61,7 +61,7 @@ function ResumenPago({
           <p className="font-montserrat text-sm text-ink">
             Saldo restante:{" "}
             <strong className="font-bold">
-              {formatearEuro(total - pagoHoy)}
+              {formatearPrecio(total - pagoHoy)}
             </strong>{" "}
             con pagos programados:
           </p>
@@ -69,7 +69,7 @@ function ResumenPago({
           <ul className="mt-2 space-y-1">
             <li className="flex items-center justify-between font-montserrat text-sm text-ink">
               <span>{FECHA_RESERVA} (Reserva)</span>
-              <span className="font-bold">{formatearEuro(pagoHoy)}</span>
+              <span className="font-bold">{formatearPrecio(pagoHoy)}</span>
             </li>
             {cuotas.map((cuota) => (
               <li
@@ -77,7 +77,7 @@ function ResumenPago({
                 className="flex items-center justify-between font-montserrat text-sm text-ink"
               >
                 <span>{cuota.fecha}</span>
-                <span className="font-bold">{formatearEuro(cuota.monto)}</span>
+                <span className="font-bold">{formatearPrecio(cuota.monto)}</span>
               </li>
             ))}
           </ul>
@@ -92,7 +92,7 @@ function ResumenPago({
               Total del viaje
             </span>
             <span className="font-montserrat text-base font-bold text-azul">
-              {formatearEuro(total)}
+              {formatearPrecio(total)}
             </span>
           </div>
         </>
